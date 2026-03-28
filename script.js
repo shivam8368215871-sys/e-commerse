@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:5000";
+const BASE_URL = "https://e-commerse-tzh7.onrender.com";
 // Change this to your Render URL when deploying e.g:
 // const BASE_URL = "https://twodots-api.onrender.com";
 
