@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Checkout • Two Dots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { 
+      box-sizing:border-box; 
+      margin:0; 
+      padding:0; 
+    }
+    
+    body { 
+      font-family:'Inter', sans-serif; 
+      background:#fefefe; 
+      color:#1a1a1a;
+      line-height:1.6;
+      min-height:100vh;
+      padding-bottom:140px;
+    }
+
+    /* Luxury Color Palette */
+    :root {
+      --primary: #000000;
+      --accent: #d4af37;
+      --secondary: #8B4513;
+      --light: #f8f8f8;
+      --dark: #1a1a1a;
+      --gray: #666;
+      --light-gray: #e5e5e5;
+      --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Header - Luxury Style */
+    .header { 
+      position:sticky; 
+      top:0; 
+      background:rgba(255,255,255,0.98); 
+      backdrop-filter:blur(20px);
+      z-index:99; 
+      box-shadow:0 1px 20px rgba(0,0,0,0.08); 
+      border-bottom:1px solid rgba(0,0,0,0.05);
+      transition: var(--transition);
+    }
+    
+    .container { 
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      padding:18px 20px; 
+      max-width:1400px;
+      margin:0 auto;
+    }
+    
+    .back-btn { 
+      font-size:22px; 
+      cursor:pointer; 
+      color:var(--dark);
+      transition:color 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      color:var(--accent);
+    }
+    
+    .logo { 
+      font-family:'Playfair Display', serif;
+      font-weight:700; 
+      font-size:24px; 
+      color:var(--primary);
+      letter-spacing:-0.5px;
+      position: relative;
+    }
+    
+    .logo span {
+      color:var(--accent);
+    }
+
+    /* Page Content */
+    .page-container {
+      max-width:600px;
+      margin:0 auto;
+      padding:20px 20px 40px;
+    }
+
+    /* Section Cards - Luxury */
+    .section {
+      background:white;
+      border-radius:0;
+      padding:32px 28px;
+      margin-bottom:24px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.08);
+      border:1px solid var(--light-gray);
+    }
+    
+    h2 {
+      font-family:'Playfair Display', serif;
+      font-size:22px;
+      font-weight:600;
+      margin-bottom:24px;
+      color:var(--dark);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--accent);
+      display:inline-block;
+    }
+
+    /* Form Elements - Luxury */
+    input, select {
+      width:100%;
+      padding:18px 20px;
+      border:1px solid var(--light-gray);
+      border-radius:0;
+      font-size:16px;
+      margin-bottom:16px;
+      transition:var(--transition);
+      font-family:inherit;
+      background:white;
+    }
+    
+    input:focus, select:focus {
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 2px rgba(212,175,55,0.1);
+    }
+    
+    .row {
+      display:flex;
+      gap:16px;
+    }
+    
+    .row input {
+      flex:1;
+    }
+
+    /* Saved Note - Luxury */
+    .saved-note {
+      background:rgba(212,175,55,0.1);
+      color:var(--dark);
+      padding:20px;
+      border-radius:0;
+      font-size:15px;
+      margin-bottom:24px;
+      border-left:3px solid var(--accent);
+      display:none;
+    }
+
+    /* Payment Options - Luxury */
+    .pay-opt {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:20px;
+      background:var(--light);
+      border-radius:0;
+      margin:12px 0;
+      cursor:pointer;
+      transition:var(--transition);
+      border:2px solid transparent;
+    }
+    
+    .pay-opt.active {
+      background:rgba(212,175,55,0.1);
+      border:2px solid var(--accent);
+    }
+    
+    .pay-opt i {
+      font-size:20px;
+      color:var(--accent);
+      opacity:0;
+      transition:opacity 0.3s ease;
+    }
+    
+    .pay-opt.active i {
+      opacity:1;
+    }
+
+    /* Order Summary - Luxury */
+    .total-row {
+      display:flex;
+      justify-content:space-between;
+      font-size:16px;
+      margin:16px 0;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--light-gray);
+    }
+    
+    .grand-total {
+      font-size:20px;
+      color:var(--accent);
+      font-weight:700;
+      border-bottom:none;
+      margin-top:20px;
+      padding-top:16px;
+      border-top:2px solid var(--accent);
+    }
+
+    /* Place Order Button - Luxury */
+    .place-order-btn {
+      width:100%;
+      padding:20px;
+      background:var(--primary);
+      color:white;
+      border:none;
+      border-radius:0;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+      margin-top:24px;
+      transition:var(--transition);
+      text-transform:uppercase;
+      letter-spacing:1.5px;
+    }
+    
+    .place-order-btn:hover {
+      background:var(--dark);
+      transform:translateY(-2px);
+      box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .place-order-btn:disabled {
+      opacity:0.6;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+
+    /* Loading - Luxury */
+    .loading {
+      display:none;
+      text-align:center;
+      padding:20px;
+      color:var(--accent);
+      font-size:16px;
+    }
+
+    /* Bottom Navigation - Luxury */
+    .bottom-nav {
+      position:fixed;
+      left:20px;
+      right:20px;
+      bottom:20px;
+      height:72px;
+      background:white;
+      border-radius:20px;
+      display:flex;
+      box-shadow:0 15px 40px rgba(0,0,0,0.15);
+      z-index:1000;
+      border:1px solid var(--light-gray);
+      overflow:hidden;
+    }
+    
+    .nav-item { 
+      flex:1; 
+      text-align:center; 
+      padding:14px 0; 
+      color:var(--gray); 
+      font-size:11px; 
+      text-decoration:none;
+      transition:all 0.3s ease;
+      position:relative;
+    }
+    
+    .nav-item.active { 
+      color:var(--primary); 
+    }
+    
+    .nav-item.active::before {
+      content:'';
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%);
+      width:30px;
+      height:2px;
+      background:var(--accent);
+    }
+    
+    .nav-item i { 
+      font-size:20px; 
+      display:block; 
+      margin-bottom:6px; 
+    }
+    
+    .nav-item:hover {
+      color:var(--primary);
+      background:var(--light);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width:768px) {
+      .page-container {
+        padding:20px 16px 40px;
+      }
+      
+      .section {
+        padding:28px 24px;
+      }
+      
+      .row {
+        flex-direction:column;
+        gap:0;
+      }
+    }
+    
+    @media (max-width:480px) {
+      .page-container {
+        padding:16px 12px 40px;
+      }
+      
+      .section {
+        padding:24px 20px;
+      }
+      
+      h2 {
+        font-size:20px;
+      }
+      
+      input, select {
+        padding:16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header - Luxury Version -->
+  <header class="header">
+    <div class="container">
+      <div class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></div>
+      <div class="logo">TWO<span>•</span>DOTS</div>
+      <div style="width:22px"></div> <!-- Spacer for balance -->
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="page-container">
+
+    <!-- Auto-fill Note -->
+    <div id="savedNote" class="saved-note">
+      <i class="fas fa-info-circle"></i>
+      Address auto-filled from your saved addresses
+    </div>
+
+    <div class="section">
+      <h2>Shipping Address</h2>
+      <form id="checkoutForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="tel" id="phone" placeholder="Phone Number" maxlength="10" required>
+        <input type="text" id="pincode" placeholder="Pincode" maxlength="6" required>
+        
+        <input type="text" id="flat" placeholder="Flat / House No. / Building" required>
+        <input type="text" id="area" placeholder="Area / Street / Sector" required>
+        
+        <div class="row">
+          <input type="text" id="landmark" placeholder="Landmark (Optional)">
+          <input type="text" id="city" placeholder="Town / City" required>
+        </div>
+
+        <select id="state" required>
+          <option value="" disabled selected>Select State</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="Rajasthan">Rajasthan</option>
+          <option value="Punjab">Punjab</option>
+          <option value="Kerala">Kerala</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Bihar">Bihar</option>
+          <option value="Andhra Pradesh">Andhra Pradesh</option>
+          <option value="Madhya Pradesh">Madhya Pradesh</option>
+          <option value="Odisha">Odisha</option>
+          <option value="Haryana">Haryana</option>
+        </select>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>Payment Method</h2>
+      <div class="pay-opt active" data-method="cod">
+        <div>Cash on Delivery (COD)</div>
+        <i class="fas fa-check"></i>
+      </div>
+      <div class="pay-opt" data-method="online">
+        <div>UPI / Card / Netbanking</div>
+        <i class="fas fa-check"></i>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Order Summary</h2>
+      <div class="total-row"><span>Items</span><span id="itemCount">0 items</span></div>
+      <div class="total-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+      <div class="total-row"><span>Shipping</span><span style="color:var(--accent);font-weight:600">FREE</span></div>
+      <div class="total-row grand-total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
+    </div>
+
+    <div class="loading" id="loading">
+      <i class="fas fa-spinner fa-spin"></i> Processing your order...
+    </div>
+
+    <button class="place-order-btn" id="placeOrder">PLACE ORDER</button>
+  </div>
+
+<!-- BOTTOM NAVIGATION - LUXURY DESIGN -->
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+  <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+  
+  <!-- SMART PROFILE BUTTON -->
+  <a href="login.html" id="profileBottomBtn" class="nav-item">
+    <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
+      <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <span id="profileText">Account</span>
+  </a>
+</div>
+  <script src="script.js"></script>
+  <!-- JavaScript - EXACTLY AS YOU HAD IT -->
+  <script>
+  document.querySelectorAll('.pay-opt').forEach(opt => {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const cart    = JSON.parse(localStorage.getItem("twoDotsCart") || "[]");
+    const user    = JSON.parse(localStorage.getItem("twoDotsUser") || "{}");
+    const loading = document.getElementById("loading");
+    const btn     = document.getElementById("placeOrder");
+
+    const addresses   = user.addresses || [];
+    const defaultAddr = addresses.find(a => a.default);
+    if (defaultAddr) {
+      document.getElementById("name").value    = defaultAddr.name || "";
+      document.getElementById("phone").value   = defaultAddr.phone || "";
+      document.getElementById("pincode").value = defaultAddr.pincode || "";
+      document.getElementById("city").value    = defaultAddr.city || "";
+      document.getElementById("state").value   = defaultAddr.state || "";
+      const parts = (defaultAddr.house || "").split(",").map(p => p.trim());
+      document.getElementById("flat").value = parts[0] || "";
+      document.getElementById("area").value = parts.slice(1).join(", ") || "";
+      document.getElementById("savedNote").style.display = "block";
+    }
+
+    const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+    const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById("itemCount").textContent  = totalItems + (totalItems === 1 ? " item" : " items");
+    document.getElementById("subtotal").textContent   = "₹" + totalPrice;
+    document.getElementById("grandTotal").textContent = "₹" + totalPrice;
+
+    btn.onclick = async () => {
+      if (cart.length === 0) return alert("Your cart is empty!");
+      if (!document.getElementById("checkoutForm").checkValidity())
+        return alert("Please fill all required fields");
+
+      const paymentMethod = document.querySelector('.pay-opt.active').dataset.method;
+
+      const orderData = {
+        items: cart.map(item => ({
+          id: item.id, name: item.name, image: item.image,
+          size: item.size, quantity: item.qty, price: item.price
+        })),
+        total: totalPrice,
+        paymentMethod,
+        address: {
+          name:     document.getElementById("name").value.trim(),
+          phone:    document.getElementById("phone").value.trim(),
+          flat:     document.getElementById("flat").value.trim(),
+          area:     document.getElementById("area").value.trim(),
+          landmark: document.getElementById("landmark").value.trim(),
+          city:     document.getElementById("city").value.trim(),
+          state:    document.getElementById("state").value,
+          pincode:  document.getElementById("pincode").value.trim()
+        }
+      };
+
+      btn.disabled = true;
+      loading.style.display = 'block';
+
+      const result = await placeOrderAPI(orderData);
+
+      if (result.success) {
+        const newAddr = {
+          name:    orderData.address.name,
+          phone:   orderData.address.phone,
+          house:   orderData.address.flat + (orderData.address.area ? ", " + orderData.address.area : ""),
+          city:    orderData.address.city,
+          state:   orderData.address.state,
+          pincode: orderData.address.pincode,
+          default: true
+        };
+        user.addresses = (user.addresses || []).filter(a => !a.default);
+        user.addresses.push(newAddr);
+        localStorage.setItem("twoDotsUser", JSON.stringify(user));
+        localStorage.removeItem("twoDotsCart");
+        alert("Order placed successfully! Thank you for shopping with Two Dots 🎉");
+        location.href = "thank-you.html";
+      } else {
+        alert(result.error || "Failed to place order. Please try again.");
+      }
+
+      btn.disabled = false;
+      loading.style.display = 'none';
+    };
+  });
+</script>
+</body>
+</html>

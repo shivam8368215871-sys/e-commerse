@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Story • Two Dots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Luxury Color Palette */
+    :root {
+      --primary: #000000;
+      --accent: #d4af37;
+      --secondary: #8B4513;
+      --light: #f8f8f8;
+      --dark: #1a1a1a;
+      --gray: #666;
+      --light-gray: #e5e5e5;
+      --red: #e91e63;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fefefe;
+      color: var(--dark);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Header - Luxury */
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .back-arrow {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212,175,55,0.1);
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 21px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .back-arrow:active {
+      transform: scale(0.92);
+    }
+
+    .back-arrow:hover {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+
+    /* Hero Section - Luxury */
+    .hero {
+      background: linear-gradient(135deg, var(--accent), #00b3a6);
+      color: white;
+      text-align: center;
+      padding: 80px 20px 100px;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0,0,0,0.1), transparent);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 2;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.95;
+      position: relative;
+      z-index: 2;
+      font-weight: 300;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 48px;
+      color: var(--dark);
+      position: relative;
+      letter-spacing: -0.5px;
+    }
+
+    .section h2::after {
+      content: "";
+      width: 80px;
+      height: 3px;
+      background: var(--accent);
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    .story-text {
+      font-size: 18px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 60px;
+      color: var(--dark);
+      line-height: 1.8;
+    }
+
+    /* Founder Section - Luxury */
+    .founder {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 60px;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 0;
+      padding: 60px 40px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      margin: 40px 20px;
+      border: 1px solid var(--light-gray);
+    }
+
+    .founder-img {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 6px solid var(--accent);
+      box-shadow: 0 15px 40px rgba(212,175,55,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .founder-img:hover {
+      transform: scale(1.05);
+    }
+
+    .founder-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .founder-info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .founder-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .founder-info .role {
+      font-size: 20px;
+      color: var(--gray);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .founder-info p {
+      font-size: 16px;
+      color: var(--dark);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .socials {
+      margin-top: 32px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .socials a {
+      width: 52px;
+      height: 52px;
+      background: rgba(212,175,55,0.1);
+      color: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(212,175,55,0.2);
+      border: 2px solid transparent;
+    }
+
+    .socials a:hover {
+      background: var(--accent);
+      color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+    }
+
+    /* Values Section - Luxury */
+    .values {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      margin-top: 60px;
+    }
+
+    .value-card {
+      background: white;
+      padding: 40px 32px;
+      border-radius: 0;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      transition: all 0.4s ease;
+      border: 1px solid var(--light-gray);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .value-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    .value-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .value-card i {
+      font-size: 48px;
+      color: var(--accent);
+      margin-bottom: 24px;
+      transition: transform 0.3s ease;
+    }
+
+    .value-card:hover i {
+      transform: scale(1.1);
+    }
+
+    .value-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--dark);
+    }
+
+    .value-card p {
+      color: var(--gray);
+      font-size: 15.5px;
+      line-height: 1.6;
+    }
+
+    /* Bottom Nav - Luxury */
+    .bottom-nav {
+      position: fixed;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      height: 72px;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      z-index: 1000;
+      border: 1px solid var(--light-gray);
+      overflow: hidden;
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 14px 0;
+      color: var(--gray);
+      font-size: 11px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .nav-item i {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .nav-item:hover {
+      color: var(--primary);
+      background: var(--light);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 60px 20px 80px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .section h2 {
+        font-size: 32px;
+      }
+
+      .founder {
+        padding: 40px 24px;
+        margin: 30px 16px;
+        gap: 40px;
+      }
+
+      .founder-img {
+        width: 220px;
+        height: 220px;
+      }
+
+      .founder-info h3 {
+        font-size: 28px;
+      }
+
+      .values {
+        gap: 24px;
+        margin-top: 40px;
+      }
+
+      .value-card {
+        padding: 32px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 50px 16px 70px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .section {
+        padding: 60px 0;
+      }
+
+      .section h2 {
+        font-size: 28px;
+      }
+
+      .story-text {
+        font-size: 16px;
+        margin-bottom: 40px;
+      }
+
+      .founder {
+        flex-direction: column;
+        text-align: center;
+        padding: 32px 20px;
+        margin: 20px 12px;
+      }
+
+      .founder-img {
+        width: 200px;
+        height: 200px;
+      }
+
+      .founder-info h3 {
+        font-size: 24px;
+      }
+
+      .socials {
+        justify-content: center;
+      }
+
+      .value-card {
+        padding: 28px 20px;
+      }
+
+      .value-card i {
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="back-arrow" onclick="history.back()">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="title">Our Story</div>
+  </div>
+
+  <div class="hero">
+    <h1>Two Dots</h1>
+    <p>Comfortable. Bold. Real. That's what we stand for.</p>
+  </div>
+
+  <div class="container">
+
+    <div class="section">
+      <p class="story-text">
+        Two Dots began with one simple belief: oversized clothing should feel like freedom. 
+        We create premium, ultra-comfy streetwear that lets you express yourself without trying too hard.
+      </p>
+    </div>
+
+    <div class="founder">
+      <div class="founder-img">
+        <img src="images/IMG-20251111-WA0000.jpg" alt="Krishna">
+      </div>
+      <div class="founder-info">
+        <h3>Krishna</h3>
+        <div class="role">Founder</div>
+        <p>
+          At just 20 years old, Krishna turned his passion for oversized fashion into a fast-growing brand loved by thousands.
+        </p>
+        <p>
+          From designing the first collection at night to packing orders with his own hands, 
+          Krishna built Two Dots from the ground up — driven by the dream of making comfort the coolest trend.
+        </p>
+        <p style="font-style:italic;color:var(--accent);font-weight:500;">
+          "I wanted a t-shirt that feels like a cloud but looks fire. So I made it."
+        </p>
+        <div class="socials">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Our Promise</h2>
+      <div class="values">
+        <div class="value-card">
+          <i class="fas fa-heart"></i>
+          <h4>Unmatched Comfort</h4>
+          <p>Soft fabrics, perfect fit, made to live in.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-gem"></i>
+          <h4>Premium Quality</h4>
+          <p>Built to last, wash after wash.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-users"></i>
+          <h4>Real Community</h4>
+          <p>You're not just a customer — you're family.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-smile"></i>
+          <h4>Good Vibes Only</h4>
+          <p>Wear what makes you feel confident and free.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+    <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+    <a href="account.html" class="nav-item" id="profileBottomBtn">
+      <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
+        <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <span id="profileText">Account</span>
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof updateProfileIcon === "function") updateProfileIcon();
+      if (typeof updateCartBadge === "function") updateCartBadge();
+    });
+  </script>
+</body>
+</html>

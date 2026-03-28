@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>About Us - Two Dots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { 
+      box-sizing:border-box; 
+      margin:0; 
+      padding:0; 
+    }
+    
+    body { 
+      font-family:'Inter', sans-serif; 
+      background:#fefefe; 
+      color:#1a1a1a;
+      line-height:1.7;
+      overflow-x:hidden;
+    }
+
+    
+    :root {
+      --primary: #000000;
+      --accent: #d4af37;
+      --secondary: #8B4513;
+      --light: #f8f8f8;
+      --dark: #1a1a1a;
+      --gray: #666;
+      --light-gray: #e5e5e5;
+      --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    
+    .header { 
+      position:sticky; 
+      top:0; 
+      background:rgba(255,255,255,0.98); 
+      backdrop-filter:blur(20px);
+      z-index:99; 
+      box-shadow:0 1px 20px rgba(0,0,0,0.08); 
+      border-bottom:1px solid rgba(0,0,0,0.05);
+      transition: var(--transition);
+    }
+    
+    .container { 
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      padding:18px 20px; 
+      max-width:1400px;
+      margin:0 auto;
+    }
+    
+    .back-btn { 
+      font-size:22px; 
+      cursor:pointer; 
+      color:var(--dark);
+      transition:color 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      color:var(--accent);
+    }
+    
+    .logo { 
+      font-family:'Playfair Display', serif;
+      font-weight:700; 
+      font-size:24px; 
+      color:var(--primary);
+      letter-spacing:-0.5px;
+      position: relative;
+    }
+    
+    .logo span {
+      color:var(--accent);
+    }
+
+    
+    .hero {
+      height:70vh;
+      min-height:500px;
+      background:linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+                  url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600') center/cover no-repeat;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:white;
+      padding:0 20px;
+      position:relative;
+    }
+    
+    .hero-content {
+      max-width:800px;
+      position:relative;
+      z-index:2;
+    }
+    
+    .hero h1 {
+      font-family:'Playfair Display', serif;
+      font-size:52px;
+      font-weight:600;
+      margin-bottom:20px;
+      letter-spacing:-0.5px;
+      line-height:1.2;
+    }
+    
+    .hero p {
+      font-size:20px;
+      opacity:0.9;
+      max-width:600px;
+      margin:0 auto;
+      font-weight:300;
+    }
+
+    
+    .page-container {
+      max-width:1200px;
+      margin:0 auto;
+      padding:80px 20px;
+    }
+
+    .section {
+      margin:100px 0;
+    }
+    
+    .section h2 {
+      font-family:'Playfair Display', serif;
+      font-size:42px;
+      font-weight:600;
+      text-align:center;
+      margin-bottom:60px;
+      color:var(--dark);
+      position:relative;
+      letter-spacing:-0.5px;
+    }
+    
+    .section h2::after {
+      content:'';
+      width:80px;
+      height:2px;
+      background:var(--accent);
+      position:absolute;
+      bottom:-20px;
+      left:50%;
+      transform:translateX(-50%);
+    }
+
+    
+    .story-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+      gap:60px;
+      align-items:center;
+    }
+    
+    .story-text {
+      font-size:17px;
+      color:var(--gray);
+      line-height:1.8;
+    }
+    
+    .story-text p {
+      margin-bottom:24px;
+    }
+    
+    .story-text strong {
+      color:var(--dark);
+      font-weight:600;
+    }
+    
+    .story-img img {
+      width:100%;
+      border-radius:0;
+      box-shadow:0 20px 60px rgba(0,0,0,0.15);
+      transition:var(--transition);
+    }
+    
+    .story-img:hover img {
+      transform:translateY(-8px);
+      box-shadow:0 30px 80px rgba(0,0,0,0.2);
+    }
+
+    
+    .values {
+      background:white;
+      padding:80px 40px;
+      border-radius:0;
+      box-shadow:0 8px 30px rgba(0,0,0,0.08);
+      border:1px solid var(--light-gray);
+      text-align:center;
+    }
+    
+    .values-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:40px;
+      margin-top:60px;
+    }
+    
+    .value-card {
+      padding:40px 30px;
+      border-radius:0;
+      transition:var(--transition);
+      border:1px solid var(--light-gray);
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .value-card::before {
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:3px;
+      background:var(--accent);
+      transform:scaleX(0);
+      transition:transform 0.3s ease;
+    }
+    
+    .value-card:hover {
+      transform:translateY(-8px);
+      box-shadow:0 20px 50px rgba(0,0,0,0.12);
+    }
+    
+    .value-card:hover::before {
+      transform:scaleX(1);
+    }
+    
+    .value-card i {
+      font-size:48px;
+      color:var(--accent);
+      margin-bottom:24px;
+    }
+    
+    .value-card h3 {
+      font-family:'Playfair Display', serif;
+      font-size:24px;
+      margin:20px 0;
+      font-weight:600;
+      color:var(--dark);
+    }
+    
+    .value-card p {
+      color:var(--gray);
+      font-size:15px;
+      line-height:1.7;
+    }
+
+    
+    .team {
+      background:linear-gradient(135deg, var(--primary), var(--dark));
+      color:white;
+      border-radius:0;
+      padding:100px 40px;
+      margin:100px 0;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .team::before {
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      background:url('https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=800') center/cover;
+      opacity:0.1;
+    }
+    
+    .team h2 {
+      color:white;
+      position:relative;
+      z-index:2;
+    }
+    
+    .team h2::after {
+      background:var(--accent);
+    }
+    
+    .team p {
+      font-size:18px;
+      max-width:800px;
+      margin:30px auto;
+      opacity:0.9;
+      position:relative;
+      z-index:2;
+      line-height:1.8;
+    }
+
+    
+    .stats {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:40px;
+      text-align:center;
+      margin:80px 0;
+    }
+    
+    .stat-num {
+      font-family:'Playfair Display', serif;
+      font-size:52px;
+      font-weight:600;
+      color:var(--accent);
+      line-height:1;
+    }
+    
+    .stat-label {
+      font-size:16px;
+      color:var(--gray);
+      margin-top:12px;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+  
+    .footer {
+      background:var(--dark);
+      color:#ddd;
+      padding:80px 20px 40px;
+      text-align:center;
+    }
+    
+    .footer-logo {
+      font-family:'Playfair Display', serif;
+      font-size:32px;
+      color:var(--accent);
+      margin-bottom:24px;
+      font-weight:600;
+    }
+    
+    .footer p {
+      color:#999;
+      margin-bottom:8px;
+    }
+    
+    .socials {
+      margin:40px 0;
+    }
+    
+    .socials a {
+      color:#999;
+      text-decoration:none;
+      margin:0 20px;
+      transition:var(--transition);
+      display:inline-block;
+    }
+    
+    .socials i {
+      font-size:24px;
+      transition:var(--transition);
+    }
+    
+    .socials a:hover i {
+      color:var(--accent);
+      transform:translateY(-3px);
+    }
+
+  
+    .bottom-nav {
+      position:fixed;
+      left:20px;
+      right:20px;
+      bottom:20px;
+      height:72px;
+      background:white;
+      border-radius:20px;
+      display:flex;
+      box-shadow:0 15px 40px rgba(0,0,0,0.15);
+      z-index:1000;
+      border:1px solid var(--light-gray);
+      overflow:hidden;
+    }
+    
+    .nav-item { 
+      flex:1; 
+      text-align:center; 
+      padding:14px 0; 
+      color:var(--gray); 
+      font-size:11px; 
+      text-decoration:none;
+      transition:all 0.3s ease;
+      position:relative;
+    }
+    
+    .nav-item.active { 
+      color:var(--primary); 
+    }
+    
+    .nav-item.active::before {
+      content:'';
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%);
+      width:30px;
+      height:2px;
+      background:var(--accent);
+    }
+    
+    .nav-item i { 
+      font-size:20px; 
+      display:block; 
+      margin-bottom:6px; 
+    }
+    
+    .nav-item:hover {
+      color:var(--primary);
+      background:var(--light);
+    }
+
+    
+    @media (max-width:768px) {
+      .hero h1 {
+        font-size:36px;
+      }
+      
+      .hero p {
+        font-size:17px;
+      }
+      
+      .section h2 {
+        font-size:32px;
+      }
+      
+      .values {
+        padding:60px 20px;
+      }
+      
+      .values-grid {
+        gap:30px;
+      }
+      
+      .value-card {
+        padding:30px 20px;
+      }
+      
+      .team {
+        padding:60px 20px;
+      }
+      
+      .page-container {
+        padding:60px 20px;
+      }
+      
+      .section {
+        margin:60px 0;
+      }
+    }
+    
+    @media (max-width:480px) {
+      .hero {
+        height:60vh;
+        min-height:400px;
+      }
+      
+      .hero h1 {
+        font-size:28px;
+      }
+      
+      .story-grid {
+        grid-template-columns:1fr;
+        gap:40px;
+      }
+      
+      .values-grid {
+        grid-template-columns:1fr;
+      }
+      
+      .stats {
+        grid-template-columns:repeat(2,1fr);
+        gap:30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <header class="header">
+    <div class="container">
+      <div class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></div>
+      <div class="logo">TWO<span>•</span>DOTS</div>
+      <div style="width:22px"></div>
+    </div>
+  </header>
+
+  
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Welcome to Two Dots</h1>
+      <p>Where comfort meets style. We design clothes that speak your vibe.</p>
+    </div>
+  </div>
+
+  <div class="page-container">
+
+    
+    <div class="section">
+      <h2>Our Story</h2>
+      <div class="story-grid">
+        <div class="story-text">
+          <p>Two Dots was born in 2022 from a simple idea: <strong>everyone deserves to feel confident and comfortable in what they wear</strong>, without breaking the bank.</p>
+          <p>We started as two friends with a passion for streetwear, oversized fits, and premium cotton tees. What began in a small room with just 5 designs has now grown into a community of over 150,000+ happy customers across India.</p>
+          <p>Every piece is designed in-house, tested for softness, and made to last — because great style shouldn't fade after one wash.</p>
+          <p>We're not just selling clothes. We're building a movement of self-expression, comfort, and unapologetic confidence.</p>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1521590832168-9f7b968ea6d6?w=800" alt="Two Dots Team">
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="section values">
+      <h2>Our Values</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <i class="fas fa-heart"></i>
+          <h3>Comfort First</h3>
+          <p>100% premium cotton. Oversized fits that feel like a hug. Designed for all-day wear.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-gem"></i>
+          <h3>Quality Obsessed</h3>
+          <p>Double-stitched. Color-locked prints. We reject anything less than perfect.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-leaf"></i>
+          <h3>Eco-Conscious</h3>
+          <p>Ethical production. Sustainable packaging. Doing our part for the planet.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-users"></i>
+          <h3>Community Driven</h3>
+          <p>Your photos, your stories, your style — you are Two Dots.</p>
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="team">
+      <h2>Join the Movement</h2>
+      <p>We don't follow trends. We create them. <br>From college campuses to late-night hangouts, Two Dots is made for the moments that matter.</p>
+      <p style="margin-top:30px;font-size:20px;font-weight:600">Be Original. Be You. Be Two Dots.</p>
+    </div>
+
+    
+    <div class="section">
+      <h2>By the Numbers</h2>
+      <div class="stats">
+        <div>
+          <div class="stat-num">150K+</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div>
+          <div class="stat-num">500+</div>
+          <div class="stat-label">Unique Designs</div>
+        </div>
+        <div>
+          <div class="stat-num">4.8</div>
+          <div class="stat-label">Average Rating</div>
+        </div>
+        <div>
+          <div class="stat-num">2M+</div>
+          <div class="stat-label">Social Media Family</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  
+  <div class="footer">
+    <div class="footer-logo">TWO<span>•</span>DOTS</div>
+    <p>Made with love in India</p>
+    <div class="socials">
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+    <p style="margin-top:40px;font-size:14px;color:#666">© 2025 Two Dots. All rights reserved.</p>
+  </div>
+
+
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+  <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+  
+  
+  <a href="login.html" id="profileBottomBtn" class="nav-item">
+    <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
+      <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <span id="profileText">Account</span>
+  </a>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

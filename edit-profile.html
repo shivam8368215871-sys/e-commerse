@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile • Two Dots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Luxury Color Palette */
+    :root {
+      --primary: #000000;
+      --accent: #d4af37;
+      --secondary: #8B4513;
+      --light: #f8f8f8;
+      --dark: #1a1a1a;
+      --gray: #666;
+      --light-gray: #e5e5e5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fefefe;
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* Header - Luxury */
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .back-arrow {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212,175,55,0.1);
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 21px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .back-arrow:active {
+      transform: scale(0.92);
+    }
+
+    .back-arrow:hover {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+      flex: 1;
+      text-align: center;
+      margin-right: 42px;
+      letter-spacing: -0.5px;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 500px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 0;
+      padding: 32px 28px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      border: 1px solid var(--light-gray);
+    }
+
+    /* Input Fields - Luxury */
+    .input-group {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 20px;
+      z-index: 2;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 18px 18px 18px 60px;
+      border: 2px solid var(--light-gray);
+      border-radius: 0;
+      font-size: 15.5px;
+      background: white;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(212,175,55,0.1);
+    }
+
+    .input-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23888'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+      background-size: 16px;
+    }
+
+    /* Save Button - Luxury */
+    .save-btn {
+      margin-top: 32px;
+      width: 100%;
+      padding: 18px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 2px solid var(--primary);
+    }
+
+    .save-btn:hover {
+      background: transparent;
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .save-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 16px;
+        margin: 24px auto;
+      }
+
+      .card {
+        padding: 28px 24px;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group input,
+      .input-group select {
+        padding: 16px 16px 16px 56px;
+        font-size: 15px;
+      }
+
+      .save-btn {
+        padding: 16px;
+        font-size: 16px;
+      }
+
+      .header {
+        padding: 14px 16px;
+      }
+
+      .back-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 19px;
+      }
+
+      .title {
+        font-size: 22px;
+        margin-right: 38px;
+      }
+    }
+
+    /* Success Message */
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--accent);
+      color: var(--primary);
+      padding: 20px 32px;
+      border-radius: 0;
+      font-weight: 600;
+      z-index: 1000;
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+      text-align: center;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: fadeInOut 2s ease-in-out;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="back-arrow" onclick="history.back()">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="title">Edit Profile</div>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="name" placeholder="Full Name" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" placeholder="Email Address" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-phone"></i>
+        <input type="tel" id="phone" placeholder="Phone Number" maxlength="10" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-calendar-alt"></i>
+        <input type="date" id="dob" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-venus-mars"></i>
+        <select id="gender" required>
+          <option value="" disabled selected>Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-home"></i>
+        <input type="text" id="address" placeholder="House No., Building, Street" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-city"></i>
+        <input type="text" id="city" placeholder="City" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-map-marker-alt"></i>
+        <input type="text" id="pincode" placeholder="Pincode" maxlength="6" required>
+      </div>
+
+      <button class="save-btn" onclick="saveProfile()" id="saveBtn">
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div class="success-message" id="successMessage">
+    Profile Updated Successfully!
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("twoDotsUser") || "{}");
+
+    // Load existing data
+    document.getElementById("name").value = user.name || "";
+    document.getElementById("email").value = user.email || "";
+    document.getElementById("phone").value = user.phone || "";
+    document.getElementById("dob").value = user.dob || "";
+    document.getElementById("gender").value = user.gender || "";
+    document.getElementById("address").value = user.address || "";
+    document.getElementById("city").value = user.city || "";
+    document.getElementById("pincode").value = user.pincode || "";
+
+    function saveProfile() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const dob = document.getElementById("dob").value;
+      const gender = document.getElementById("gender").value;
+      const address = document.getElementById("address").value.trim();
+      const city = document.getElementById("city").value.trim();
+      const pincode = document.getElementById("pincode").value.trim();
+      const saveBtn = document.getElementById("saveBtn");
+
+      if (!name || !phone || !dob || !gender || !address || !city || !pincode) {
+        return alert("Please fill all fields");
+      }
+      if (phone.length !== 10) {
+        return alert("Enter valid 10-digit phone number");
+      }
+
+      // Show loading state
+      saveBtn.innerHTML = '<div class="loading-spinner"></div>Saving...';
+      saveBtn.disabled = true;
+
+      // Simulate API call delay
+      setTimeout(() => {
+        // Save updated user
+        const updatedUser = {
+          ...user,
+          name,
+          email: document.getElementById("email").value,
+          phone,
+          dob,
+          gender,
+          address,
+          city,
+          pincode
+        };
+
+        localStorage.setItem("twoDotsUser", JSON.stringify(updatedUser));
+        
+        // Update in all users list
+        let allUsers = JSON.parse(localStorage.getItem("twoDotsUsers") || "[]");
+        allUsers = allUsers.map(u => u.id === user.id ? updatedUser : u);
+        localStorage.setItem("twoDotsUsers", JSON.stringify(allUsers));
+
+        // Show success message
+        const successMessage = document.getElementById("successMessage");
+        successMessage.classList.add('show');
+        
+        // Reset button state
+        saveBtn.innerHTML = 'Save Changes';
+        saveBtn.disabled = false;
+
+        // Redirect after success message
+        setTimeout(() => {
+          successMessage.classList.remove('show');
+          history.back();
+        }, 1500);
+      }, 1000);
+    }
+
+    // Enter key support
+    document.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") saveProfile();
+    });
+  </script>
+</body>
+</html>

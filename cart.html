@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Shopping Bag • Two Dots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* Luxury Color Palette */
+    :root {
+      --primary: #000000;
+      --accent: #d4af37;
+      --secondary: #8B4513;
+      --light: #f8f8f8;
+      --dark: #1a1a1a;
+      --gray: #666;
+      --light-gray: #e5e5e5;
+    }
+
+    *, *::before, *::after { 
+      box-sizing:border-box; 
+      margin:0; 
+      padding:0; 
+    }
+    
+    body { 
+      font-family:'Inter', sans-serif; 
+      background:#fefefe; 
+      overflow-x:hidden; 
+      min-height:100vh; 
+      color: var(--dark);
+    }
+
+    /* Header - Luxury */
+    .header {
+      position:sticky; 
+      top:0; 
+      background:rgba(255,255,255,0.95); 
+      backdrop-filter:blur(20px);
+      z-index:99;
+      box-shadow:0 2px 20px rgba(0,0,0,0.08); 
+      padding:16px 20px;
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .back-btn { 
+      font-size:22px; 
+      color:var(--dark); 
+      cursor:pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      color: var(--accent);
+    }
+    
+    .page-title { 
+      font-family: 'Playfair Display', serif;
+      font-size:24px; 
+      font-weight:600; 
+      color:var(--dark);
+      letter-spacing: -0.5px;
+    }
+    
+    .cart-icon-link { 
+      position:relative; 
+      display:inline-block; 
+      color:var(--dark);
+      transition: color 0.3s ease;
+    }
+    
+    .cart-icon-link:hover {
+      color: var(--accent);
+    }
+    
+    .cart-badge {
+      position:absolute; 
+      top:-8px; 
+      right:-10px;
+      background:var(--accent); 
+      color:var(--primary); 
+      font-size:11px; 
+      font-weight:600;
+      width:20px; 
+      height:20px; 
+      border-radius:50%; 
+      display:flex;
+      align-items:center; 
+      justify-content:center;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(212,175,55,0.3);
+    }
+
+    /* Empty State - Luxury Centered */
+    .empty-cart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      padding: 60px 20px;
+    }
+    
+    .empty-cart i {
+      font-size: 80px;
+      color: var(--light-gray);
+      margin-bottom: 24px;
+    }
+    
+    .empty-cart h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    
+    .empty-cart p {
+      font-size: 16px;
+      color: var(--gray);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+    
+    .start-shopping-btn {
+      background: var(--primary);
+      color: white;
+      padding: 16px 40px;
+      border-radius: 0;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      border: 2px solid var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .start-shopping-btn:hover {
+      background: transparent;
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    /* Cart Items - ORIGINAL STRUCTURE with Luxury Design */
+    .cart-item {
+      background:white; 
+      margin:16px 15px; 
+      border-radius:18px;
+      overflow:hidden; 
+      box-shadow:0 6px 18px rgba(0,0,0,0.1);
+      display:flex; 
+      align-items:center; 
+      gap:16px;
+      transition:transform 0.2s;
+      border: 1px solid var(--light-gray);
+    }
+    
+    .cart-item:hover { 
+      transform:translateY(-2px); 
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    }
+    
+    .cart-item img { 
+      width:120px; 
+      height:150px; 
+      object-fit:cover;
+    }
+    
+    .cart-item-info { 
+      flex:1; 
+      padding:6px 0; 
+    }
+    
+    .cart-item-name {
+      font-size:15px; 
+      font-weight:600; 
+      color:var(--dark); 
+      margin-bottom:4px;
+      display:-webkit-box; 
+      -webkit-line-clamp:2; 
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    
+    .size-tag { 
+      font-size:13px; 
+      color:var(--gray); 
+      margin:6px 0; 
+    }
+    
+    .qty-controls { 
+      display:flex; 
+      align-items:center; 
+      gap:12px; 
+      margin:12px 0; 
+    }
+    
+    .qty-btn {
+      width:38px; 
+      height:38px; 
+      border-radius:10px; 
+      border:none;
+      font-size:20px; 
+      font-weight:600; 
+      cursor:pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .qty-minus { 
+      background:var(--light); 
+      color:var(--gray);
+      border: 2px solid var(--light-gray);
+    }
+    
+    .qty-minus:hover {
+      background: var(--light-gray);
+      color: var(--dark);
+    }
+    
+    .qty-plus { 
+      background:var(--accent); 
+      color:var(--primary); 
+      border:2px solid var(--accent);
+    }
+    
+    .qty-plus:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+    
+    .qty-num { 
+      min-width:36px; 
+      text-align:center; 
+      font-weight:700; 
+      font-size:16px; 
+    }
+    
+    .item-price { 
+      font-size:18px; 
+      font-weight:700; 
+      color:var(--accent); 
+    }
+    
+    .remove-btn { 
+      color:var(--gray); 
+      font-size:13px; 
+      background:none; 
+      border:none; 
+      cursor:pointer; 
+      margin-top:8px; 
+      font-weight:500;
+      transition: color 0.3s ease;
+    }
+    
+    .remove-btn:hover {
+      color: #e91e63;
+    }
+
+    /* Summary & Checkout - Luxury */
+    .summary-card {
+      background:white; 
+      margin:20px 15px; 
+      padding:20px;
+      border-radius:18px; 
+      box-shadow:0 6px 18px rgba(0,0,0,0.1);
+      border: 1px solid var(--light-gray);
+    }
+    
+    .summary-row {
+      display:flex; 
+      justify-content:space-between; 
+      font-size:16px;
+      padding:10px 0; 
+      border-bottom:1px solid var(--light-gray);
+    }
+    
+    .summary-row:last-child { 
+      border:none; 
+      font-weight:700; 
+      font-size:18px; 
+      color:var(--accent);
+    }
+    
+    .checkout-btn {
+      position:fixed; 
+      bottom:82px; 
+      left:15px; 
+      right:15px;
+      background:var(--primary); 
+      color:white; 
+      padding:18px;
+      border-radius:20px; 
+      border:none; 
+      font-weight:700; 
+      font-size:17px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.25); 
+      z-index:98;
+      letter-spacing:0.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+    
+    .checkout-btn:hover {
+      background: var(--accent);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(212,175,55,0.4);
+    }
+
+    /* Bottom Nav - Luxury */
+    .bottom-nav {
+      position:fixed; 
+      left:12px; 
+      right:12px; 
+      bottom:14px;
+      height:68px; 
+      background:white; 
+      border-radius:24px;
+      display:flex; 
+      box-shadow:0 12px 35px rgba(0,0,0,0.2); 
+      z-index:1000;
+    }
+    
+    .nav-item { 
+      flex:1; 
+      text-align:center; 
+      padding:10px 0; 
+      color:var(--gray); 
+      font-size:11px; 
+      text-decoration:none;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item.active { 
+      color:var(--primary); 
+    }
+    
+    .nav-item i { 
+      font-size:24px; 
+      display:block; 
+      margin-bottom:4px; 
+    }
+    
+    .nav-item:hover {
+      color: var(--primary);
+    }
+
+    /* Hide content when empty */
+    .content-when-not-empty { 
+      display:none; 
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="back-btn" onclick="history.back()">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <h1 class="page-title">My Bag</h1>
+    <a href="cart.html" class="cart-icon-link">
+      <i class="fas fa-shopping-bag"></i>
+      <span class="cart-badge">0</span>
+    </a>
+  </header>
+
+  <!-- EMPTY STATE - Centered on screen -->
+  <div class="empty-cart" id="emptyState">
+    <i class="fas fa-shopping-bag"></i>
+    <h2>Your bag is empty</h2>
+    <p>Looks like you haven't added anything yet.<br>Start shopping and fill it up!</p>
+    <a href="index.html" class="start-shopping-btn">Start Shopping</a>
+  </div>
+
+  <!-- CART CONTENT (only visible when items exist) -->
+  <div class="content-when-not-empty" id="cartContent">
+    <div id="cartItems"></div>
+
+    <div class="summary-card">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">₹0</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>FREE</span>
+      </div>
+      <div class="summary-row">
+        <span>Total</span>
+        <span id="totalAmount">₹0</span>
+      </div>
+    </div>
+
+    <button class="checkout-btn" onclick="location.href='checkout.html'">
+      PROCEED TO CHECKOUT
+    </button>
+  </div>
+
+  <!-- BOTTOM NAVIGATION - LUXURY DESIGN -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+    <a href="cart.html" class="nav-item active"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+    
+    <!-- SMART PROFILE BUTTON -->
+    <a href="login.html" id="profileBottomBtn" class="nav-item">
+      <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:3px solid var(--accent);">
+        <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <span id="profileText">Account</span>
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Only run renderCart and update badge – DO NOT redefine renderCart!
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCartBadge();
+      renderCart(); // This now uses the correct function from script.js
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Two Dots - Winter Collection'25</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+
+    /* ─── RESET & ROOT ─────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary:      #0a0a0a;
+      --ivory:        #f7f3ec;
+      --gold:         #b8964e;
+      --gold-light:   #d4af6a;
+      --gold-pale:    #e8d5a8;
+      --gold-muted:   rgba(184, 150, 78, 0.10);
+      --cream:        #faf8f4;
+      --warm-gray:    #968e84;
+      --border:       rgba(0, 0, 0, 0.07);
+      --border-warm:  rgba(184, 150, 78, 0.18);
+      --shadow-sm:    0 4px 20px rgba(0, 0, 0, 0.07);
+      --shadow-lg:    0 28px 72px rgba(0, 0, 0, 0.14);
+      --shadow-gold:  0 8px 32px rgba(184, 150, 78, 0.18);
+      --radius-sm:    8px;
+      --radius-md:    16px;
+      --radius-lg:    24px;
+      --radius-xl:    32px;
+      --font-head:    'Cormorant Garamond', Georgia, serif;
+      --font-body:    'DM Sans', sans-serif;
+      --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ─── GRAIN OVERLAY ────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.55;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -30vh;
+      right: -20vw;
+      width: 70vw;
+      height: 70vw;
+      background: radial-gradient(ellipse at center, rgba(184,150,78,0.055) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      padding-bottom: 110px;
+      overflow-x: hidden;
+      color: var(--primary);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── ANIMATIONS ───────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.25; transform: scale(1); }
+      50%       { opacity: 0.70; transform: scale(1.04); }
+    }
+    @keyframes sliderShimmer {
+      0%   { transform: translateX(-100%) skewX(-15deg); }
+      100% { transform: translateX(300%) skewX(-15deg); }
+    }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-4px); }
+    }
+
+    section {
+      animation: fadeUp 0.75s var(--ease-out) both;
+      position: relative;
+      z-index: 1;
+    }
+    section:nth-of-type(1) { animation-delay: 0.12s; }
+    section:nth-of-type(2) { animation-delay: 0.22s; }
+    section:nth-of-type(3) { animation-delay: 0.32s; }
+    section:nth-of-type(4) { animation-delay: 0.42s; }
+
+    /* ─── HEADER ───────────────────────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(250, 248, 244, 0.82);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      z-index: 99;
+      border-bottom: 1px solid var(--border-warm);
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 96px;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 35%, var(--gold-light) 50%, var(--gold) 65%, transparent 100%);
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .menu-icon {
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--primary);
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      transition: all 0.28s ease;
+    }
+
+    .menu-icon:hover {
+      background: var(--gold-muted);
+      border-color: var(--border-warm);
+      color: var(--gold);
+      transform: scale(1.05);
+    }
+
+    .logo {
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 24px;
+      color: var(--primary);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .logo span {
+      color: var(--gold);
+      font-style: italic;
+      display: inline-block;
+      transform: scale(1.2);
+      margin: 0 1px;
+    }
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .header-icons a {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      transition: all 0.28s ease;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .header-icons a:hover {
+      background: var(--gold-muted);
+      border-color: var(--border-warm);
+      color: var(--gold);
+      transform: scale(1.05);
+    }
+
+    .header-icons i {
+      font-size: 18px;
+      transition: color 0.25s ease;
+    }
+
+    .header-icons a:hover i { color: var(--gold); }
+
+    .cart-badge {
+      position: absolute !important;
+      top: 4px !important;
+      right: 4px !important;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light)) !important;
+      color: white !important;
+      font-size: 9px !important;
+      width: 17px !important;
+      height: 17px !important;
+      border-radius: 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-weight: 700 !important;
+      font-family: var(--font-body) !important;
+      border: 2px solid var(--cream) !important;
+      box-shadow: 0 2px 8px rgba(184,150,78,0.45) !important;
+    }
+
+    /* ─── SIDEBAR ──────────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 82%;
+      max-width: 340px;
+      height: 100%;
+      background: var(--cream);
+      transition: left 0.48s var(--ease-out);
+      z-index: 1001;
+      box-shadow: 16px 0 80px rgba(0,0,0,0.14);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-warm);
+    }
+
+    .sidebar.active { left: 0; }
+
+    .sidebar > div:first-child {
+      padding: 32px 28px 26px !important;
+      border-bottom: 1px solid var(--border-warm) !important;
+      background: var(--ivory) !important;
+      position: relative;
+    }
+
+    .sidebar > div:first-child::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 28px;
+      width: 36px;
+      height: 1.5px;
+      background: var(--gold);
+    }
+
+    .sidebar > div:first-child h3 {
+      font-family: var(--font-head) !important;
+      font-size: 28px !important;
+      font-weight: 600 !important;
+      font-style: italic !important;
+      letter-spacing: 0.5px;
+      color: var(--primary) !important;
+    }
+
+    .sidebar > div:first-child span {
+      color: var(--warm-gray) !important;
+      font-size: 28px !important;
+      line-height: 1;
+      transition: color 0.2s ease, transform 0.25s ease;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .sidebar > div:first-child span:hover {
+      color: var(--primary) !important;
+      transform: rotate(90deg);
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 18px 28px !important;
+      color: var(--primary) !important;
+      text-decoration: none;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border) !important;
+      transition: background 0.22s ease, padding-left 0.28s var(--ease-out), color 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar a::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--gold);
+      transform: scaleY(0);
+      transition: transform 0.25s var(--ease-out);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .sidebar a::after {
+      content: '→';
+      position: absolute;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%) translateX(4px);
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.22s ease, transform 0.25s ease;
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .sidebar a:hover {
+      background: var(--gold-muted) !important;
+      padding-left: 36px !important;
+      color: var(--gold) !important;
+    }
+
+    .sidebar a:hover::before { transform: scaleY(1); }
+    .sidebar a:hover::after  { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.48);
+      z-index: 1000;
+      backdrop-filter: blur(3px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .overlay.active { display: block; }
+
+    /* ─── HERO SLIDER ──────────────────────────────────────────── */
+    .hero-slider {
+      position: relative;
+      margin: 20px 20px 48px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      height: 500px;
+      animation: fadeUp 0.85s var(--ease-out) 0.04s both;
+      z-index: 1;
+      /* Multi-layer shadow for depth */
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 24px rgba(0,0,0,0.10),
+        0 32px 72px rgba(0,0,0,0.18),
+        0 0 0 1px rgba(184,150,78,0.20);
+    }
+
+    /* Top-left gold corner */
+    .hero-slider::before {
+      content: '';
+      position: absolute;
+      top: 20px; left: 20px;
+      width: 44px; height: 44px;
+      border-top: 2px solid rgba(212,175,106,0.85);
+      border-left: 2px solid rgba(212,175,106,0.85);
+      z-index: 4;
+      pointer-events: none;
+      border-radius: 4px 0 0 0;
+    }
+
+    /* Bottom-right gold corner */
+    .hero-slider::after {
+      content: '';
+      position: absolute;
+      bottom: 20px; right: 20px;
+      width: 44px; height: 44px;
+      border-bottom: 2px solid rgba(212,175,106,0.85);
+      border-right: 2px solid rgba(212,175,106,0.85);
+      z-index: 4;
+      pointer-events: none;
+      border-radius: 0 0 4px 0;
+    }
+
+    .slides-wrapper {
+      display: flex;
+      width: 300%;
+      height: 100%;
+      transition: transform 0.85s var(--ease-out);
+    }
+
+    .slide {
+      width: calc(100% / 3);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      filter: brightness(0.62) saturate(0.88);
+      transition: transform 7s ease, filter 0.6s ease;
+      transform: scale(1.04);
+    }
+
+    /* Active slide ken-burns */
+    .slide.is-active img {
+      transform: scale(1.10);
+    }
+
+    /* Main dark gradient */
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.12) 55%, transparent 100%),
+        linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%);
+      z-index: 1;
+    }
+
+    /* Gold tint overlay on right side */
+    .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to left, rgba(184,150,78,0.08) 0%, transparent 60%);
+      z-index: 1;
+    }
+
+    /* Slide text */
+    .slide-text {
+      position: absolute;
+      bottom: 60px;
+      left: 52px;
+      color: white;
+      z-index: 3;
+      max-width: 400px;
+    }
+
+    /* Small eyebrow label above title */
+    .slide-text p {
+      font-size: 9.5px;
+      margin-bottom: 12px;
+      opacity: 0.72;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-text p::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: var(--gold-light);
+      opacity: 0.8;
+    }
+
+    .slide-text h2 {
+      font-family: var(--font-head);
+      font-size: 56px;
+      font-weight: 600;
+      font-style: italic;
+      margin-bottom: 24px;
+      line-height: 1.0;
+      letter-spacing: -1px;
+      text-shadow:
+        0 2px 8px rgba(0,0,0,0.25),
+        0 8px 32px rgba(0,0,0,0.20);
+    }
+
+    .shop-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent;
+      color: white;
+      padding: 14px 28px;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 9px;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      transition: all 0.38s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+      font-family: var(--font-body);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .shop-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-out);
+      z-index: -1;
+    }
+
+    /* Shimmer sweep on hover */
+    .shop-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: -60%;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      transform: skewX(-15deg);
+      transition: none;
+      opacity: 0;
+    }
+
+    .shop-btn:hover {
+      border-color: var(--gold);
+      color: white;
+      box-shadow: 0 6px 28px rgba(184,150,78,0.35);
+      letter-spacing: 4px;
+    }
+
+    .shop-btn:hover::before { transform: scaleX(1); }
+
+    .shop-btn:hover::after {
+      opacity: 1;
+      animation: sliderShimmer 0.7s ease forwards;
+    }
+
+    /* Arrow icon inside button */
+    .shop-btn span.btn-arrow {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 300;
+      transition: transform 0.3s var(--ease-spring);
+    }
+
+    .shop-btn:hover span.btn-arrow { transform: translateX(5px); }
+
+    /* Slide counter top-right */
+    .slide-counter {
+      position: absolute;
+      top: 28px;
+      right: 28px;
+      z-index: 4;
+      color: rgba(255,255,255,0.55);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-counter .current {
+      color: var(--gold-light);
+      font-size: 16px;
+      font-family: var(--font-head);
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    /* Dots */
+    .dots {
+      position: absolute;
+      bottom: 28px;
+      left: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 4;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      transition: all 0.45s var(--ease-out);
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .dot.active {
+      background: var(--gold);
+      width: 32px;
+      border-radius: 10px;
+      border-color: var(--gold);
+      box-shadow: 0 0 14px rgba(184,150,78,0.60);
+    }
+
+    /* Progress bar under active dot */
+    .dot.active::after {
+      content: '';
+      display: block;
+    }
+
+    /* ─── SECTION TITLES ───────────────────────────────────────── */
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin: 56px 20px 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 2px;
+    }
+
+    .section-title h2 {
+      font-family: var(--font-head);
+      font-size: 32px;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--primary);
+      letter-spacing: -0.3px;
+    }
+
+    .section-title a {
+      color: var(--warm-gray);
+      font-size: 9px;
+      text-decoration: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      transition: color 0.25s ease, letter-spacing 0.25s ease;
+      position: relative;
+    }
+
+    .section-title a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0; right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.28s ease;
+    }
+
+    .section-title a:hover { color: var(--gold); letter-spacing: 3px; }
+    .section-title a:hover::after { transform: scaleX(1); }
+
+    /* ─── SCROLL SECTION ───────────────────────────────────────── */
+    .scroll-section {
+      display: flex;
+      overflow-x: auto;
+      gap: 18px;
+      padding: 8px 20px 40px;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      -webkit-mask-image: linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
+    }
+
+    .scroll-section::-webkit-scrollbar { display: none; }
+
+    /* ─── PRODUCT CARD ─────────────────────────────────────────── */
+    /*
+      FIX: Removed the ::after border-box gradient trick — it was
+      making the entire card transparent on hover due to a paint
+      conflict with overflow:hidden. Replaced with a simple
+      box-shadow gold ring approach which is rock solid.
+    */
+    .product-card {
+      flex: 0 0 246px;
+      background: white;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.45s var(--ease-out), box-shadow 0.45s ease;
+      border: 1px solid var(--border);
+      position: relative;
+      scroll-snap-align: start;
+      cursor: pointer;
+    }
+
+    /* Gold ring on hover via box-shadow — no pseudo-element needed */
+    .product-card:hover {
+      transform: translateY(-12px) scale(1.01);
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.04),
+        0 12px 40px rgba(0,0,0,0.12),
+        0 0 0 1.5px var(--gold-light);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform 0.65s var(--ease-out);
+      display: block;
+    }
+
+    .product-card:hover img { transform: scale(1.07); }
+
+    /* Subtle dark scrim on image on hover */
+    .product-card .img-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 300px;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.18) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .product-card:hover .img-overlay { opacity: 1; }
+
+    .product-card .info {
+      padding: 18px 18px 20px;
+      background: white;
+      position: relative;
+    }
+
+    .product-card .name {
+      font-size: 13.5px;
+      color: var(--primary);
+      font-weight: 400;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 13px;
+      height: 40px;
+      letter-spacing: 0.1px;
+    }
+
+    .product-card .price-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .product-card .price {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--primary);
+      letter-spacing: 0.3px;
+    }
+
+    .product-card .old-price {
+      text-decoration: line-through;
+      color: var(--warm-gray);
+      font-size: 13px;
+      font-weight: 300;
+      opacity: 0.75;
+    }
+
+    .product-card .discount {
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--gold-muted);
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(184,150,78,0.18);
+    }
+
+    .product-card .info::after {
+      content: '+ Quick Add';
+      display: block;
+      margin-top: 14px;
+      text-align: center;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.32s ease, transform 0.32s ease;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .product-card:hover .info::after { opacity: 1; transform: translateY(0); }
+
+    /* ─── NEW TAG ──────────────────────────────────────────────── */
+    .new-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--primary);
+      color: var(--gold-pale);
+      padding: 5px 12px;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      z-index: 2;
+      border-radius: 2px;
+      font-family: var(--font-body);
+    }
+
+    .new-tag::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border: 1px solid rgba(184,150,78,0.3);
+      border-radius: 4px;
+      animation: pulse 2.8s infinite;
+    }
+
+    /* ─── BOTTOM NAV ───────────────────────────────────────────── */
+    .bottom-nav {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      height: 70px;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      border-radius: 22px;
+      display: flex;
+      box-shadow:
+        0 10px 50px rgba(0,0,0,0.38),
+        inset 0 0 0 1px rgba(255,255,255,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .bottom-nav::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.5;
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 13px 0 10px;
+      color: rgba(255,255,255,0.32);
+      font-size: 8.5px;
+      text-decoration: none;
+      transition: color 0.28s ease;
+      position: relative;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .nav-item.active { color: var(--gold); }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 22px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 0 0 3px 3px;
+    }
+
+    .nav-item i {
+      font-size: 17px;
+      display: block;
+      transition: transform 0.25s var(--ease-spring);
+    }
+
+    .nav-item:hover { color: rgba(255,255,255,0.65); }
+    .nav-item:hover i { transform: translateY(-3px); }
+    .nav-item.active:hover { color: var(--gold-light); }
+
+    #profileAvatar {
+      width: 26px !important;
+      height: 26px !important;
+      border-radius: 50% !important;
+      overflow: hidden !important;
+      background: #222 !important;
+      border: 1.5px solid var(--gold) !important;
+      box-shadow: 0 0 0 1px rgba(184,150,78,0.25) !important;
+      margin: 0 !important;
+    }
+
+    /* ─── LOADING SPINNER ──────────────────────────────────────── */
+    .loading-spinner {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      border: 2px solid rgba(184,150,78,0.15);
+      border-top: 2px solid var(--gold);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    ::selection {
+      background: rgba(184,150,78,0.15);
+      color: var(--primary);
+    }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 360px) {
+      .logo { font-size: 19px; letter-spacing: 2.5px; }
+      .container { padding: 13px 16px; }
+      .hero-slider { height: 340px; margin: 10px 10px 24px; border-radius: var(--radius-md); }
+      .slide-text { left: 20px; bottom: 38px; max-width: 260px; }
+      .slide-text h2 { font-size: 28px; }
+      .slide-text p { font-size: 8.5px; letter-spacing: 2.5px; margin-bottom: 8px; }
+      .shop-btn { padding: 10px 16px; font-size: 8px; letter-spacing: 2.5px; }
+      .dots { left: 20px; bottom: 16px; }
+      .slide-counter { top: 18px; right: 18px; }
+      .section-title { margin: 32px 12px 14px; }
+      .section-title h2 { font-size: 22px; }
+      .scroll-section { padding: 6px 12px 28px; gap: 12px; }
+      .product-card { flex: 0 0 175px; }
+      .product-card img { height: 215px; }
+      .product-card .img-overlay { height: 215px; }
+      .product-card .info { padding: 13px 13px 15px; }
+      .product-card .name { font-size: 12.5px; height: 38px; }
+      .product-card .price { font-size: 14px; }
+      .bottom-nav { left: 8px; right: 8px; height: 60px; border-radius: 15px; }
+      .nav-item { font-size: 7.5px; }
+      .nav-item i { font-size: 15px; }
+    }
+
+    @media (min-width: 361px) and (max-width: 480px) {
+      .logo { font-size: 21px; letter-spacing: 3px; }
+      .hero-slider { height: 400px; margin: 14px 14px 32px; border-radius: var(--radius-lg); }
+      .slide-text { left: 26px; bottom: 42px; max-width: 290px; }
+      .slide-text h2 { font-size: 34px; }
+      .slide-text p { margin-bottom: 8px; }
+      .shop-btn { padding: 11px 20px; font-size: 8.5px; }
+      .dots { left: 26px; }
+      .section-title { margin: 38px 16px 18px; }
+      .section-title h2 { font-size: 26px; }
+      .scroll-section { padding: 6px 16px 30px; gap: 14px; }
+      .product-card { flex: 0 0 200px; }
+      .product-card img { height: 245px; }
+      .product-card .img-overlay { height: 245px; }
+      .bottom-nav { left: 10px; right: 10px; height: 64px; border-radius: 18px; }
+    }
+
+    @media (min-width: 481px) and (max-width: 767px) {
+      .logo { font-size: 22px; }
+      .hero-slider { height: 440px; margin: 16px 16px 36px; border-radius: var(--radius-lg); }
+      .slide-text { left: 34px; bottom: 48px; max-width: 320px; }
+      .slide-text h2 { font-size: 42px; }
+      .dots { left: 34px; }
+      .section-title { margin: 44px 18px 20px; }
+      .section-title h2 { font-size: 28px; }
+      .scroll-section { padding: 6px 18px 34px; gap: 16px; }
+      .product-card { flex: 0 0 228px; }
+      .product-card img { height: 270px; }
+      .product-card .img-overlay { height: 270px; }
+    }
+
+    @media (min-width: 768px) {
+      .container { padding: 18px 40px; }
+      .logo { font-size: 26px; letter-spacing: 4px; }
+      .menu-icon { width: 44px; height: 44px; font-size: 19px; }
+      .hero-slider { height: 580px; margin: 24px 24px 52px; border-radius: var(--radius-xl); }
+      .slide-text { left: 64px; bottom: 72px; max-width: 460px; }
+      .slide-text h2 { font-size: 62px; }
+      .slide-text p { font-size: 10px; margin-bottom: 14px; }
+      .shop-btn { padding: 15px 32px; font-size: 10px; }
+      .dots { left: 64px; bottom: 32px; }
+      .slide-counter { top: 32px; right: 32px; }
+      .section-title { margin: 68px 24px 26px; }
+      .section-title h2 { font-size: 38px; }
+      .scroll-section { padding: 8px 24px 44px; gap: 20px; }
+      .product-card { flex: 0 0 268px; }
+      .product-card img { height: 315px; }
+      .product-card .img-overlay { height: 315px; }
+      .bottom-nav { left: 28px; right: 28px; bottom: 20px; height: 72px; border-radius: 22px; }
+      .nav-item i { font-size: 18px; }
+    }
+
+    @media (min-width: 1024px) {
+      body { padding-bottom: 0; }
+      .hero-slider { height: 660px; margin: 28px 28px 60px; border-radius: 32px; }
+      .slide-text { left: 80px; bottom: 80px; max-width: 520px; }
+      .slide-text h2 { font-size: 78px; }
+      .slide-text p { font-size: 11px; letter-spacing: 4.5px; margin-bottom: 16px; }
+      .shop-btn { padding: 16px 36px; font-size: 10px; }
+      .dots { left: 80px; bottom: 36px; }
+      .slide-counter { top: 36px; right: 36px; }
+      .section-title { margin: 76px 28px 30px; }
+      .section-title h2 { font-size: 42px; }
+      .scroll-section { padding: 10px 28px 52px; gap: 24px; }
+      .product-card { flex: 0 0 290px; }
+      .product-card img { height: 340px; }
+      .product-card .img-overlay { height: 340px; }
+      .bottom-nav { left: 50%; transform: translateX(-50%); width: 480px; right: unset; bottom: 28px; }
+      .product-card:hover { transform: translateY(-14px) scale(1.015); }
+    }
+
+    @media (min-width: 1280px) {
+      .hero-slider { height: 700px; }
+      .slide-text h2 { font-size: 86px; }
+      .product-card { flex: 0 0 308px; }
+      .product-card img { height: 358px; }
+      .product-card .img-overlay { height: 358px; }
+    }
+
+    @media (min-width: 1440px) {
+      .hero-slider { height: 740px; margin: 32px auto 64px; max-width: 1360px; }
+      .section-title { margin-left: auto; margin-right: auto; max-width: 1360px; padding-left: 0; padding-right: 0; }
+      .scroll-section { padding-left: max(28px, calc((100% - 1360px) / 2)); padding-right: max(28px, calc((100% - 1360px) / 2)); }
+      .slide-text { left: 88px; }
+      .slide-text h2 { font-size: 92px; }
+      .product-card { flex: 0 0 316px; }
+      .product-card img { height: 368px; }
+      .product-card .img-overlay { height: 368px; }
+    }
+
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div id="menuBtn" class="menu-icon"><i class="fas fa-bars"></i></div>
+    <div class="logo">TWO<span>•</span>DOTS</div>
+    <div class="header-icons">
+      <a href="cart.html" style="position:relative;color:inherit;text-decoration:none;">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-badge" style="position:absolute;top:-8px;right:-10px;background:var(--accent);color:var(--primary);font-size:11px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div style="padding:24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--light-gray);">
+      <h3 style="margin:0;font-size:21px;font-weight:600;font-family:'Playfair Display', serif;">Menu</h3>
+      <span id="closeBtn" style="font-size:30px;cursor:pointer;color:var(--gray);">×</span>
+    </div>
+    <div>
+      <a href="catalog.html" style="display:block;padding:20px 24px;color:var(--dark);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--light-gray);transition:background 0.3s ease;">All Products</a>
+      <a href="categories.html" style="display:block;padding:20px 24px;color:var(--dark);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--light-gray);transition:background 0.3s ease;">All Categories</a>
+      <a href="story.html" style="display:block;padding:20px 24px;color:var(--dark);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--light-gray);transition:background 0.3s ease;">Our Story</a>
+      <a href="catalog.html?filter=new" style="display:block;padding:20px 24px;color:var(--dark);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--light-gray);transition:background 0.3s ease;">New Arrivals</a>
+      <a href="about.html" style="display:block;padding:20px 24px;color:var(--dark);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--light-gray);transition:background 0.3s ease;">About</a>
+      <a href="terms.html" style="display:block;padding:20px 24px;color:var(--dark);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--light-gray);transition:background 0.3s ease;">Terms &amp; Conditions</a>
+    </div>
+  </div>
+  <div class="overlay" id="overlay"></div>
+
+<!-- HERO SLIDER -->
+<div class="hero-slider" id="heroSlider">
+  <div class="slides-wrapper">
+    <a href="catalog.html?filter=new" class="slide" style="text-decoration:none;color:inherit;display:block;">
+      <img src="images/slider1.jpeg" alt="Winter Collection">
+      <div class="slide-text">
+        <h2>Winter Drop '25</h2>
+        <p>Exclusive Collection • Limited Edition</p>
+        <div class="shop-btn">Explore Now <span class="btn-arrow">→</span></div>
+      </div>
+    </a>
+    <a href="catalog.html?filter=new" class="slide" style="text-decoration:none;color:inherit;display:block;">
+      <img src="images/slider2.jpeg" alt="New Arrivals">
+      <div class="slide-text">
+        <h2>Fresh Drop</h2>
+        <p>Premium Craftsmanship • Timeless Style</p>
+        <div class="shop-btn">Discover <span class="btn-arrow">→</span></div>
+      </div>
+    </a>
+    <a href="catalog.html?filter=oversized" class="slide" style="text-decoration:none;color:inherit;display:block;">
+      <img src="images/slider3.jpeg" alt="Oversized">
+      <div class="slide-text">
+        <h2>Oversized Tees</h2>
+        <p>Luxury Comfort • Elevated Basics</p>
+        <div class="shop-btn">Shop Collection <span class="btn-arrow">→</span></div>
+      </div>
+    </a>
+  </div>
+  <div class="slide-counter">
+    <span class="current">01</span>
+    <span>/</span>
+    <span>03</span>
+  </div>
+  <div class="dots">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+</div>
+
+  <section>
+    <div class="section-title"><h2>New Arrivals</h2><a href="catalog.html?filter=new">View All →</a></div>
+    <div class="scroll-section" id="new">
+      <div class="product-card">
+        <div class="new-tag">NEW</div>
+        <img src="images/new1.jpeg" alt="Premium Oversized Tee">
+        <div class="img-overlay"></div>
+        <div class="info">
+          <div class="name">Premium Oversized Cotton Tee - Black</div>
+          <div class="price-row">
+            <div class="price">₹899</div>
+            <div class="old-price">₹1299</div>
+            <div class="discount">31% OFF</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="new-tag">NEW</div>
+        <img src="images/new2.jpeg" alt="Luxury Graphic Tee">
+        <div class="img-overlay"></div>
+        <div class="info">
+          <div class="name">Luxury Graphic Print Tee - Navy</div>
+          <div class="price-row">
+            <div class="price">₹799</div>
+            <div class="old-price">₹1199</div>
+            <div class="discount">33% OFF</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="new-tag">NEW</div>
+        <img src="images/new3.jpeg" alt="Signature Collection">
+        <div class="img-overlay"></div>
+        <div class="info">
+          <div class="name">Signature Collection Tee - Olive</div>
+          <div class="price-row">
+            <div class="price">₹999</div>
+            <div class="old-price">₹1499</div>
+            <div class="discount">33% OFF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>Printed Collection</h2><a href="catalog.html?filter=printed">View All →</a></div>
+    <div class="scroll-section" id="printed">
+      <div class="product-card">
+        <img src="images/printed1.jpeg" alt="Abstract Print Tee">
+        <div class="img-overlay"></div>
+        <div class="info">
+          <div class="name">Abstract Art Print Tee - White</div>
+          <div class="price-row">
+            <div class="price">₹699</div>
+            <div class="old-price">₹999</div>
+            <div class="discount">30% OFF</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="new-tag">NEW</div>
+        <img src="images/printed2.jpeg" alt="Typography Tee">
+        <div class="img-overlay"></div>
+        <div class="info">
+          <div class="name">Minimal Typography Tee - Grey</div>
+          <div class="price-row">
+            <div class="price">₹749</div>
+            <div class="old-price">₹1099</div>
+            <div class="discount">32% OFF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>Oversized Drop</h2><a href="catalog.html?filter=oversized">View All →</a></div>
+    <div class="scroll-section" id="oversized">
+      <div class="product-card">
+        <div class="new-tag">NEW</div>
+        <img src="images/oversized1.jpeg" alt="Oversized Comfort Tee">
+        <div class="img-overlay"></div>
+        <div class="info">
+          <div class="name">Oversized Comfort Tee - Beige</div>
+          <div class="price-row">
+            <div class="price">₹849</div>
+            <div class="old-price">₹1249</div>
+            <div class="discount">32% OFF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>Women's Collection</h2><a href="catalog.html?filter=women">View All →</a></div>
+    <div class="scroll-section" id="women">
+      <div class="product-card">
+        <div class="new-tag">NEW</div>
+        <img src="images/womens1.jpeg" alt="Women's Premium Tee">
+        <div class="img-overlay"></div>
+        <div class="info">
+          <div class="name">Women's Premium Fit Tee - Burgundy</div>
+          <div class="price-row">
+            <div class="price">₹799</div>
+            <div class="old-price">₹1199</div>
+            <div class="discount">33% OFF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+  <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+  <a href="login.html" id="profileBottomBtn" class="nav-item">
+    <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
+      <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <span id="profileText">Account</span>
+  </a>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
