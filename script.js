@@ -269,7 +269,7 @@ async function addToWishlistAPI(product) {
       method: "POST",
       headers: authHeaders(),
       body: JSON.stringify({
-        product_id: product.id,
+        id: product.id,
         name: product.name,
         price: product.price,
         image: product.image

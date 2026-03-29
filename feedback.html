@@ -60,7 +60,7 @@
         <img src="" alt="" id="userPic">
         <div>
           <div class="user-name" id="userName">User</div>
-          <div class="user-email" id="userEmail">user@example.com</div>
+          <div class="user-email" id="userEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e99c9a8c9ba98c91888499858cc78a8684">[email&#160;protected]</a></div>
         </div>
       </div>
       <textarea id="feedbackText" placeholder="Share your experience with Two Dots... We value your feedback!"></textarea>
@@ -83,7 +83,7 @@
     </a>
   </div>
 
-  <script src="script.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script.js"></script>
   <script>
     const user = JSON.parse(localStorage.getItem("twoDotsUser") || "{}");
     if (!user.email) { location.href = "login.html"; }
@@ -106,6 +106,11 @@
       if (result.success) {
         alert("Thank you for your valuable feedback!");
         document.getElementById("feedbackText").value = "";
+      } else if (result.error === "Token expired" || result.error === "Invalid token" || result.error === "Token missing") {
+        alert("Your session has expired. Please login again.");
+        localStorage.removeItem("twoDotsToken");
+        localStorage.removeItem("twoDotsUser");
+        location.href = "login.html";
       } else {
         alert(result.error || "Failed to submit. Please try again.");
       }
