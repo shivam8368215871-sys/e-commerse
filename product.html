@@ -1355,9 +1355,9 @@
             else showCartFeedback("Please login to use wishlist");
           } else {
             const fullImageUrl = new URL(p.image, window.location.href).href;
-            const ok = await addToWishlistAPI({ id: currentProductId, name: p.name, price: p.price, image: fullImageUrl });
-            if (ok) { heart.classList.add("active"); showCartFeedback("Added to wishlist! ♥"); }
-            else showCartFeedback("Please login to use wishlist");
+            const result = await addToWishlistAPI({ id: currentProductId, name: p.name, price: p.price, image: fullImageUrl });
+            if (result && result.ok) { heart.classList.add("active"); showCartFeedback("Added to wishlist! ♥"); }
+            else showCartFeedback(result?.error || "Failed to add to wishlist");
           }
         };
 

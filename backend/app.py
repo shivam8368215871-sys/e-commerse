@@ -383,12 +383,16 @@ def add_to_wishlist(current_user):
     d = request.get_json()
     if not d:
         return jsonify({"error": "No data"}), 400
-    product_id = d.get("id")
+    product_id = d.get("id") or d.get("product_id")  # accept both keys
     name       = d.get("name", "")
     price      = d.get("price", 0)
     image      = d.get("image", "")
-    if not product_id:
+    if product_id is None:
         return jsonify({"error": "Product id required"}), 400
+    try:
+        product_id = int(product_id)
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid product id"}), 400
     # Don't add duplicate
     exists = Wishlist.query.filter_by(user_id=current_user.id, product_id=product_id).first()
     if exists:

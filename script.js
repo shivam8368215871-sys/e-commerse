@@ -286,8 +286,10 @@ async function addToWishlistAPI(product) {
       location.href = "login.html";
       return false;
     }
-    return res.ok;
-  } catch { return false; }
+    const responseData = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, error: responseData.error || "Failed" };
+    return { ok: true };
+  } catch (err) { return { ok: false, error: err.message }; }
 }
 
 async function removeFromWishlistAPI(productId) {
