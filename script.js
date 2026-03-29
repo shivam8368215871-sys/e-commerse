@@ -174,9 +174,13 @@ async function login() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Login failed");
+    // Clear ALL previous user data before saving new user
+    localStorage.removeItem("twoDotsToken");
+    localStorage.removeItem("twoDotsUser");
+    localStorage.removeItem("twoDotsCart");
+    localStorage.removeItem("wishlist");
     localStorage.setItem("twoDotsToken", data.token);
     localStorage.setItem("twoDotsUser", JSON.stringify(data.user));
-    localStorage.removeItem("wishlist"); // clear old localStorage wishlist
     alert("Welcome back, " + (data.user.name?.split(" ")[0] || "User") + "!");
     location.href = "account.html";
   } catch (err) { alert(err.message); }
@@ -275,6 +279,13 @@ async function addToWishlistAPI(product) {
         image: product.image
       })
     });
+    if (res.status === 401) {
+      localStorage.removeItem("twoDotsToken");
+      localStorage.removeItem("twoDotsUser");
+      alert("Your session has expired. Please login again.");
+      location.href = "login.html";
+      return false;
+    }
     return res.ok;
   } catch { return false; }
 }
@@ -284,6 +295,13 @@ async function removeFromWishlistAPI(productId) {
     const res = await fetch(`${BASE_URL}/wishlist/${productId}`, {
       method: "DELETE", headers: authHeaders()
     });
+    if (res.status === 401) {
+      localStorage.removeItem("twoDotsToken");
+      localStorage.removeItem("twoDotsUser");
+      alert("Your session has expired. Please login again.");
+      location.href = "login.html";
+      return false;
+    }
     return res.ok;
   } catch { return false; }
 }
