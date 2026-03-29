@@ -7,498 +7,97 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    *, *::before, *::after { 
-      box-sizing:border-box; 
-      margin:0; 
-      padding:0; 
-    }
-    
-    body { 
-      font-family:'Inter', sans-serif; 
-      background:#fefefe; 
-      color:#1a1a1a;
-      line-height:1.6;
-      min-height:100vh;
-    }
-
-    /* Luxury Color Palette */
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter', sans-serif; background:#fefefe; color:#1a1a1a; line-height:1.6; min-height:100vh; }
     :root {
-      --primary: #000000;
-      --accent: #d4af37;
-      --secondary: #8B4513;
-      --light: #f8f8f8;
-      --dark: #1a1a1a;
-      --gray: #666;
-      --light-gray: #e5e5e5;
-      --delete: #dc2626;
-      --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --primary:#000000; --accent:#d4af37; --light:#f8f8f8;
+      --dark:#1a1a1a; --gray:#666; --light-gray:#e5e5e5;
+      --delete:#dc2626; --transition:all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-
-    /* Header - Luxury Style */
-    .header { 
-      position:sticky; 
-      top:0; 
-      background:rgba(255,255,255,0.98); 
-      backdrop-filter:blur(20px);
-      z-index:99; 
-      box-shadow:0 1px 20px rgba(0,0,0,0.08); 
-      border-bottom:1px solid rgba(0,0,0,0.05);
-      transition: var(--transition);
-    }
-    
-    .container { 
-      display:flex; 
-      justify-content:space-between; 
-      align-items:center; 
-      padding:18px 20px; 
-      max-width:1400px;
-      margin:0 auto;
-    }
-    
-    .back-btn { 
-      font-size:22px; 
-      cursor:pointer; 
-      color:var(--dark);
-      transition:color 0.3s ease;
-    }
-    
-    .back-btn:hover {
-      color:var(--accent);
-    }
-    
-    .logo { 
-      font-family:'Playfair Display', serif;
-      font-weight:700; 
-      font-size:24px; 
-      color:var(--primary);
-      letter-spacing:-0.5px;
-      position: relative;
-    }
-    
-    .logo span {
-      color:var(--accent);
-    }
-
-    /* Page Content */
-    .page-container {
-      max-width:600px;
-      margin:0 auto;
-      padding:30px 20px 120px;
-    }
-
-    /* Address Cards - Luxury */
-    .address-card {
-      background:white;
-      border-radius:0;
-      padding:32px 28px;
-      margin-bottom:20px;
-      box-shadow:0 8px 30px rgba(0,0,0,0.08);
-      border:1px solid var(--light-gray);
-      position:relative;
-      transition:var(--transition);
-    }
-    
-    .address-card:hover {
-      transform:translateY(-2px);
-      box-shadow:0 12px 40px rgba(0,0,0,0.12);
-    }
-    
-    .address-card.default {
-      border:2px solid var(--accent);
-    }
-    
-    .default-badge {
-      position:absolute;
-      top:20px;
-      right:20px;
-      background:var(--accent);
-      color:var(--primary);
-      font-size:12px;
-      padding:6px 16px;
-      border-radius:0;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:0.5px;
-    }
-    
-    .address-name {
-      font-family:'Playfair Display', serif;
-      font-weight:600;
-      font-size:18px;
-      margin-bottom:12px;
-      color:var(--dark);
-    }
-    
-    .address-details {
-      line-height:1.7;
-      font-size:15px;
-      color:var(--gray);
-    }
-    
-    .address-phone {
-      margin-top:12px;
-      font-weight:600;
-      color:var(--dark);
-    }
-
-    /* Address Actions - Luxury */
-    .address-actions {
-      margin-top:24px;
-      display:flex;
-      gap:12px;
-    }
-    
-    .btn {
-      padding:12px 24px;
-      border-radius:0;
-      font-size:14px;
-      cursor:pointer;
-      border:1.5px solid var(--primary);
-      background:transparent;
-      color:var(--primary);
-      font-weight:500;
-      transition:var(--transition);
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-    }
-    
-    .btn:hover {
-      background:var(--primary);
-      color:white;
-    }
-    
-    .btn.delete {
-      color:var(--delete);
-      border-color:var(--delete);
-    }
-    
-    .btn.delete:hover {
-      background:var(--delete);
-      color:white;
-    }
-
-    /* Add Button - Luxury */
-    .add-btn {
-      width:100%;
-      padding:20px;
-      background:var(--primary);
-      color:white;
-      border:none;
-      border-radius:0;
-      font-size:16px;
-      font-weight:600;
-      cursor:pointer;
-      margin:32px 0;
-      transition:var(--transition);
-      text-transform:uppercase;
-      letter-spacing:1.5px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:12px;
-    }
-    
-    .add-btn:hover {
-      background:var(--dark);
-      transform:translateY(-2px);
-      box-shadow:0 8px 25px rgba(0,0,0,0.15);
-    }
-
-    /* Empty State - Luxury */
-    .empty-state {
-      text-align:center;
-      padding:100px 20px;
-      color:var(--gray);
-      background:white;
-      border:1px solid var(--light-gray);
-    }
-    
-    .empty-state i {
-      font-size:80px;
-      margin-bottom:24px;
-      opacity:0.3;
-      color:var(--accent);
-    }
-    
-    .empty-state h3 {
-      font-family:'Playfair Display', serif;
-      font-size:24px;
-      margin:16px 0;
-      color:var(--dark);
-      font-weight:600;
-    }
-    
-    .empty-state p {
-      font-size:16px;
-      margin-bottom:32px;
-      color:var(--gray);
-    }
-    
-    .continue-btn {
-      background:var(--primary);
-      color:white;
-      border:none;
-      padding:16px 40px;
-      border-radius:0;
-      font-size:16px;
-      font-weight:600;
-      cursor:pointer;
-      transition:var(--transition);
-      text-transform:uppercase;
-      letter-spacing:1px;
-    }
-    
-    .continue-btn:hover {
-      background:var(--dark);
-      transform:translateY(-2px);
-    }
-
-    /* Modal Styles - Luxury - FIXED POSITION */
-    .modal {
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.6);
-      z-index:1000;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-    }
-    
-    .modal.active {
-      display:flex;
-    }
-    
-    .modal-content {
-      background:white;
-      width:100%;
-      max-width:500px;
-      border-radius:0;
-      padding:32px;
-      max-height:85vh; /* Reduced height to ensure button is visible */
-      overflow-y:auto;
-      border:1px solid var(--light-gray);
-      position: relative;
-      margin-bottom: 80px; /* Added margin to push content up */
-    }
-    
-    .modal-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:24px;
-      padding-bottom:16px;
-      border-bottom:2px solid var(--accent);
-    }
-    
-    .modal-header h2 {
-      font-family:'Playfair Display', serif;
-      font-size:24px;
-      color:var(--dark);
-      font-weight:600;
-    }
-    
-    .close-btn {
-      font-size:32px;
-      cursor:pointer;
-      color:var(--gray);
-      transition:color 0.3s ease;
-    }
-    
-    .close-btn:hover {
-      color:var(--dark);
-    }
-    
-    .form-group {
-      margin-bottom:20px;
-    }
-    
-    .form-group label {
-      display:block;
-      margin-bottom:8px;
-      font-weight:500;
-      color:var(--dark);
-    }
-    
-    .form-group input {
-      width:100%;
-      padding:16px 20px;
-      border:1px solid var(--light-gray);
-      border-radius:0;
-      font-size:15px;
-      font-family:'Inter', sans-serif;
-      transition:var(--transition);
-      background:white;
-    }
-    
-    .form-group input:focus {
-      outline:none;
-      border-color:var(--accent);
-      box-shadow:0 0 0 2px rgba(212,175,55,0.1);
-    }
-    
-    .btn-primary {
-      width:100%;
-      padding:18px;
-      background:var(--primary);
-      color:white;
-      border:none;
-      border-radius:0;
-      font-size:16px;
-      font-weight:600;
-      cursor:pointer;
-      margin-top:16px;
-      transition:var(--transition);
-      text-transform:uppercase;
-      letter-spacing:1px;
-      position: sticky;
-      bottom: 0;
-    }
-    
-    .btn-primary:hover {
-      background:var(--dark);
-    }
-    
-    .set-default {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      margin:20px 0;
-      font-size:15px;
-      color:var(--dark);
-    }
-    
-    .set-default input[type="checkbox"] {
-      width:18px;
-      height:18px;
-      accent-color:var(--accent);
-    }
-
-    /* Bottom Navigation - Luxury */
-    .bottom-nav {
-      position:fixed;
-      left:20px;
-      right:20px;
-      bottom:20px;
-      height:72px;
-      background:white;
-      border-radius:20px;
-      display:flex;
-      box-shadow:0 15px 40px rgba(0,0,0,0.15);
-      z-index:1000;
-      border:1px solid var(--light-gray);
-      overflow:hidden;
-    }
-    
-    .nav-item { 
-      flex:1; 
-      text-align:center; 
-      padding:14px 0; 
-      color:var(--gray); 
-      font-size:11px; 
-      text-decoration:none;
-      transition:all 0.3s ease;
-      position:relative;
-    }
-    
-    .nav-item.active { 
-      color:var(--primary); 
-    }
-    
-    .nav-item.active::before {
-      content:'';
-      position:absolute;
-      top:0;
-      left:50%;
-      transform:translateX(-50%);
-      width:30px;
-      height:2px;
-      background:var(--accent);
-    }
-    
-    .nav-item i { 
-      font-size:20px; 
-      display:block; 
-      margin-bottom:6px; 
-    }
-    
-    .nav-item:hover {
-      color:var(--primary);
-      background:var(--light);
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width:768px) {
-      .page-container {
-        padding:24px 16px 120px;
-      }
-      
-      .address-card {
-        padding:28px 24px;
-      }
-      
-      .modal-content {
-        padding:28px 24px;
-        max-height:80vh; /* Further reduced for mobile */
-        margin-bottom: 100px; /* More margin on mobile */
-      }
-    }
-    
+    .header { position:sticky; top:0; background:rgba(255,255,255,0.98); backdrop-filter:blur(20px); z-index:99; box-shadow:0 1px 20px rgba(0,0,0,0.08); border-bottom:1px solid rgba(0,0,0,0.05); }
+    .container { display:flex; justify-content:space-between; align-items:center; padding:18px 20px; max-width:1400px; margin:0 auto; }
+    .back-btn { font-size:22px; cursor:pointer; color:var(--dark); transition:color 0.3s ease; }
+    .back-btn:hover { color:var(--accent); }
+    .logo { font-family:'Playfair Display', serif; font-weight:700; font-size:24px; color:var(--primary); letter-spacing:-0.5px; }
+    .logo span { color:var(--accent); }
+    .page-container { max-width:600px; margin:0 auto; padding:30px 20px 120px; }
+    .loading-state { text-align:center; padding:60px 20px; color:var(--gray); }
+    .loading-spinner { display:inline-block; width:36px; height:36px; border:3px solid var(--light-gray); border-top:3px solid var(--accent); border-radius:50%; animation:spin 1s linear infinite; margin-bottom:12px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .address-card { background:white; border-radius:0; padding:32px 28px; margin-bottom:20px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border:1px solid var(--light-gray); position:relative; transition:var(--transition); }
+    .address-card:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(0,0,0,0.12); }
+    .address-card.default { border:2px solid var(--accent); }
+    .default-badge { position:absolute; top:20px; right:20px; background:var(--accent); color:var(--primary); font-size:12px; padding:6px 16px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+    .address-name { font-family:'Playfair Display', serif; font-weight:600; font-size:18px; margin-bottom:12px; color:var(--dark); }
+    .address-details { line-height:1.7; font-size:15px; color:var(--gray); }
+    .address-phone { margin-top:12px; font-weight:600; color:var(--dark); }
+    .address-actions { margin-top:24px; display:flex; gap:12px; }
+    .btn { padding:12px 24px; border-radius:0; font-size:14px; cursor:pointer; border:1.5px solid var(--primary); background:transparent; color:var(--primary); font-weight:500; transition:var(--transition); display:inline-flex; align-items:center; gap:8px; }
+    .btn:hover { background:var(--primary); color:white; }
+    .btn.delete { color:var(--delete); border-color:var(--delete); }
+    .btn.delete:hover { background:var(--delete); color:white; }
+    .add-btn { width:100%; padding:20px; background:var(--primary); color:white; border:none; border-radius:0; font-size:16px; font-weight:600; cursor:pointer; margin:32px 0; transition:var(--transition); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; justify-content:center; gap:12px; }
+    .add-btn:hover { background:var(--dark); transform:translateY(-2px); }
+    .empty-state { text-align:center; padding:100px 20px; color:var(--gray); background:white; border:1px solid var(--light-gray); }
+    .empty-state i { font-size:80px; margin-bottom:24px; opacity:0.3; color:var(--accent); }
+    .empty-state h3 { font-family:'Playfair Display', serif; font-size:24px; margin:16px 0; color:var(--dark); font-weight:600; }
+    .empty-state p { font-size:16px; margin-bottom:32px; color:var(--gray); }
+    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+    .modal.active { display:flex; }
+    .modal-content { background:white; width:100%; max-width:500px; border-radius:0; padding:32px; max-height:85vh; overflow-y:auto; border:1px solid var(--light-gray); margin-bottom:80px; }
+    .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid var(--accent); }
+    .modal-header h2 { font-family:'Playfair Display', serif; font-size:24px; color:var(--dark); font-weight:600; }
+    .close-btn { font-size:32px; cursor:pointer; color:var(--gray); transition:color 0.3s ease; }
+    .close-btn:hover { color:var(--dark); }
+    .form-group { margin-bottom:20px; }
+    .form-group label { display:block; margin-bottom:8px; font-weight:500; color:var(--dark); }
+    .form-group input { width:100%; padding:16px 20px; border:1px solid var(--light-gray); border-radius:0; font-size:15px; font-family:'Inter', sans-serif; transition:var(--transition); background:white; }
+    .form-group input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px rgba(212,175,55,0.1); }
+    .btn-primary { width:100%; padding:18px; background:var(--primary); color:white; border:none; border-radius:0; font-size:16px; font-weight:600; cursor:pointer; margin-top:16px; transition:var(--transition); text-transform:uppercase; letter-spacing:1px; }
+    .btn-primary:hover { background:var(--dark); }
+    .btn-primary:disabled { opacity:0.6; cursor:not-allowed; }
+    .set-default { display:flex; align-items:center; gap:12px; margin:20px 0; font-size:15px; color:var(--dark); }
+    .set-default input[type="checkbox"] { width:18px; height:18px; accent-color:var(--accent); }
+    .bottom-nav { position:fixed; left:20px; right:20px; bottom:20px; height:72px; background:white; border-radius:20px; display:flex; box-shadow:0 15px 40px rgba(0,0,0,0.15); z-index:1000; border:1px solid var(--light-gray); overflow:hidden; }
+    .nav-item { flex:1; text-align:center; padding:14px 0; color:var(--gray); font-size:11px; text-decoration:none; transition:all 0.3s ease; position:relative; }
+    .nav-item.active { color:var(--primary); }
+    .nav-item.active::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:30px; height:2px; background:var(--accent); }
+    .nav-item i { font-size:20px; display:block; margin-bottom:6px; }
+    .nav-item:hover { color:var(--primary); background:var(--light); }
     @media (max-width:480px) {
-      .page-container {
-        padding:20px 12px 120px;
-      }
-      
-      .address-card {
-        padding:24px 20px;
-      }
-      
-      .address-actions {
-        flex-direction:column;
-      }
-      
-      .btn {
-        width:100%;
-        justify-content:center;
-      }
-      
-      .modal-content {
-        padding:24px 20px;
-        max-height:75vh; /* Even smaller on very small screens */
-        margin-bottom: 120px;
-      }
+      .address-actions { flex-direction:column; }
+      .btn { width:100%; justify-content:center; }
+      .modal-content { padding:24px 20px; max-height:75vh; margin-bottom:120px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header - Luxury Version -->
   <header class="header">
     <div class="container">
       <div class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></div>
       <div class="logo">TWO<span>•</span>DOTS</div>
-      <div style="width:22px"></div> <!-- Spacer for balance -->
+      <div style="width:22px"></div>
     </div>
   </header>
 
-  <!-- Page Content -->
   <div class="page-container">
+    <div id="loadingState" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading addresses...</p>
+    </div>
     <div id="addressesList"></div>
-
-    <button class="add-btn" onclick="openModal()">
+    <button class="add-btn" onclick="openModal()" id="addBtn" style="display:none">
       <i class="fas fa-plus"></i> Add New Address
     </button>
-
-    <div id="emptyState" class="empty-state">
+    <div id="emptyState" class="empty-state" style="display:none">
       <i class="fas fa-map-marker-alt"></i>
       <h3>No Addresses Saved</h3>
       <p>Add your delivery address to checkout faster</p>
-      <button class="continue-btn" onclick="location.href='index.html'">Continue Shopping</button>
+      <button class="add-btn" onclick="openModal()" style="margin:0 auto;max-width:300px">Add Address</button>
     </div>
   </div>
 
-  <!-- Add/Edit Address Modal - Luxury -->
   <div id="addressModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -506,95 +105,91 @@
         <span class="close-btn" onclick="closeModal()">×</span>
       </div>
       <form id="addressForm">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="name" placeholder="Enter your full name" required>
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="phone" placeholder="Enter your phone number" required>
-        </div>
-        <div class="form-group">
-          <label>House No., Building, Street, Area</label>
-          <input type="text" id="house" placeholder="Enter your complete address" required>
-        </div>
-        <div class="form-group">
-          <label>City</label>
-          <input type="text" id="city" placeholder="Enter your city" required>
-        </div>
-        <div class="form-group">
-          <label>State</label>
-          <input type="text" id="state" placeholder="Enter your state" required>
-        </div>
-        <div class="form-group">
-          <label>Pincode</label>
-          <input type="text" id="pincode" placeholder="Enter 6-digit pincode" required maxlength="6">
-        </div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="name" placeholder="Enter your full name" required></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="Enter phone number" required></div>
+        <div class="form-group"><label>House No., Building, Street, Area</label><input type="text" id="house" placeholder="Enter your complete address" required></div>
+        <div class="form-group"><label>City</label><input type="text" id="city" placeholder="Enter your city" required></div>
+        <div class="form-group"><label>State</label><input type="text" id="state" placeholder="Enter your state"></div>
+        <div class="form-group"><label>Pincode</label><input type="text" id="pincode" placeholder="Enter 6-digit pincode" required maxlength="6"></div>
         <div class="set-default">
-          <input type="checkbox" id="default">
-          <label for="default">Set as default address</label>
+          <input type="checkbox" id="isDefault">
+          <label for="isDefault">Set as default address</label>
         </div>
-        <button type="submit" class="btn-primary">Save Address</button>
+        <button type="submit" class="btn-primary" id="saveAddrBtn">Save Address</button>
       </form>
     </div>
   </div>
 
-<!-- BOTTOM NAVIGATION - LUXURY DESIGN -->
-<div class="bottom-nav">
-  <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
-  <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
-  <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
-  
-  <!-- SMART PROFILE BUTTON -->
-  <a href="login.html" id="profileBottomBtn" class="nav-item">
-    <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
-      <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-    <span id="profileText">Account</span>
-  </a>
-</div>
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+    <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+    <a href="login.html" id="profileBottomBtn" class="nav-item">
+      <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
+        <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <span id="profileText">Account</span>
+    </a>
+  </div>
 
+  <script src="script.js"></script>
   <script>
-    let user = JSON.parse(localStorage.getItem("twoDotsUser") || "{}");
-    let addresses = user.addresses || [];
-    let editingIndex = -1;
+    const BASE = window.BASE_URL || "https://e-commerse-tzh7.onrender.com";
+    let editingId = null;
 
-    // Clean existing address data
-    addresses = addresses.map(addr => {
-      if (typeof addr.house === "string" && addr.house.includes("{addr.city}")) {
-        addr.house = addr.house.split("\\(")[0].trim();
-      }
-      return addr;
+    function authHeaders() {
+      return {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + (localStorage.getItem("twoDotsToken") || "")
+      };
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      updateCartBadge();
+      updateProfileIcon();
+      const token = localStorage.getItem("twoDotsToken");
+      if (!token) { location.href = "login.html"; return; }
+      await loadAddresses();
     });
 
-    const addressesList = document.getElementById("addressesList");
-    const emptyState = document.getElementById("emptyState");
-    const modal = document.getElementById("addressModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const form = document.getElementById("addressForm");
+    async function loadAddresses() {
+      try {
+        const res = await fetch(`${BASE}/addresses`, { headers: authHeaders() });
+        if (!res.ok) throw new Error("Failed");
+        const addresses = await res.json();
+        renderAddresses(addresses);
+      } catch (e) {
+        document.getElementById("loadingState").innerHTML = "<p>Failed to load addresses. Please try again.</p>";
+      }
+    }
 
-    function renderAddresses() {
+    function renderAddresses(addresses) {
+      document.getElementById("loadingState").style.display = "none";
+      document.getElementById("addBtn").style.display = "flex";
+      const list = document.getElementById("addressesList");
+
       if (addresses.length === 0) {
-        emptyState.style.display = "block";
-        addressesList.innerHTML = "";
+        document.getElementById("emptyState").style.display = "block";
+        document.getElementById("addBtn").style.display = "none";
+        list.innerHTML = "";
         return;
       }
-      emptyState.style.display = "none";
 
-      addressesList.innerHTML = addresses.map((addr, index) => `
+      document.getElementById("emptyState").style.display = "none";
+      list.innerHTML = addresses.map(addr => `
         <div class="address-card ${addr.default ? 'default' : ''}">
           ${addr.default ? '<div class="default-badge">Default</div>' : ''}
-          <div class="address-name">${addr.name || "Name"}</div>
+          <div class="address-name">${addr.name}</div>
           <div class="address-details">
-            ${addr.house || "House/Building/Apartment"}<br>
-            ${addr.city || "City"}, ${addr.state || "State"} - ${addr.pincode || "000000"}
-            <div class="address-phone">Phone: ${addr.phone || "0000000000"}</div>
+            ${addr.house}<br>
+            ${addr.city}${addr.state ? ', ' + addr.state : ''} - ${addr.pincode}
+            <div class="address-phone">Phone: ${addr.phone}</div>
           </div>
           <div class="address-actions">
-            <button class="btn" onclick="editAddress(${index})">
+            <button class="btn" onclick="editAddress(${addr.id}, '${encodeURIComponent(JSON.stringify(addr))}')">
               <i class="fas fa-edit"></i> Edit
             </button>
-            <button class="btn delete" onclick="deleteAddress(${index})">
+            <button class="btn delete" onclick="deleteAddress(${addr.id})">
               <i class="fas fa-trash"></i> Delete
             </button>
           </div>
@@ -602,88 +197,84 @@
       `).join("");
     }
 
-    function openModal() {
-      editingIndex = -1;
-      modalTitle.textContent = "Add New Address";
-      form.reset();
-      document.getElementById("default").checked = addresses.length === 0;
-      modal.classList.add("active");
+    function openModal(reset=true) {
+      if (reset) {
+        editingId = null;
+        document.getElementById("modalTitle").textContent = "Add New Address";
+        document.getElementById("addressForm").reset();
+      }
+      document.getElementById("addressModal").classList.add("active");
     }
 
     function closeModal() {
-      modal.classList.remove("active");
+      document.getElementById("addressModal").classList.remove("active");
+      editingId = null;
     }
 
-    function editAddress(index) {
-      editingIndex = index;
-      const address = addresses[index];
-      modalTitle.textContent = "Edit Address";
-      document.getElementById("name").value = address.name || "";
-      document.getElementById("phone").value = address.phone || "";
-      document.getElementById("house").value = address.house || "";
-      document.getElementById("city").value = address.city || "";
-      document.getElementById("state").value = address.state || "";
-      document.getElementById("pincode").value = address.pincode || "";
-      document.getElementById("default").checked = !!address.default;
-      modal.classList.add("active");
+    function editAddress(id, encodedAddr) {
+      const addr = JSON.parse(decodeURIComponent(encodedAddr));
+      editingId = id;
+      document.getElementById("modalTitle").textContent = "Edit Address";
+      document.getElementById("name").value    = addr.name    || "";
+      document.getElementById("phone").value   = addr.phone   || "";
+      document.getElementById("house").value   = addr.house   || "";
+      document.getElementById("city").value    = addr.city    || "";
+      document.getElementById("state").value   = addr.state   || "";
+      document.getElementById("pincode").value = addr.pincode || "";
+      document.getElementById("isDefault").checked = !!addr.default;
+      openModal(false);
     }
 
-    function deleteAddress(index) {
-      if (confirm("Are you sure you want to delete this address?")) {
-        addresses.splice(index, 1);
-        // If we deleted the default address, set the first one as default
-        if (addresses.length > 0 && !addresses.some(addr => addr.default)) {
-          addresses[0].default = true;
-        }
-        saveAddresses();
+    async function deleteAddress(id) {
+      if (!confirm("Are you sure you want to delete this address?")) return;
+      try {
+        const res = await fetch(`${BASE}/addresses/${id}`, {
+          method: "DELETE", headers: authHeaders()
+        });
+        if (!res.ok) throw new Error("Failed");
+        await loadAddresses();
+      } catch (e) {
+        alert("Failed to delete address. Please try again.");
       }
     }
 
-    form.addEventListener("submit", function(e) {
+    document.getElementById("addressForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-      
-      const newAddress = {
-        name: document.getElementById("name").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        house: document.getElementById("house").value.trim(),
-        city: document.getElementById("city").value.trim(),
-        state: document.getElementById("state").value.trim(),
+      const saveBtn = document.getElementById("saveAddrBtn");
+      saveBtn.textContent = "Saving...";
+      saveBtn.disabled = true;
+
+      const payload = {
+        name:    document.getElementById("name").value.trim(),
+        phone:   document.getElementById("phone").value.trim(),
+        house:   document.getElementById("house").value.trim(),
+        city:    document.getElementById("city").value.trim(),
+        state:   document.getElementById("state").value.trim(),
         pincode: document.getElementById("pincode").value.trim(),
-        default: document.getElementById("default").checked
+        default: document.getElementById("isDefault").checked
       };
 
-      // If setting as default, remove default from all other addresses
-      if (newAddress.default) {
-        addresses.forEach(addr => addr.default = false);
-      }
-
-      if (editingIndex === -1) {
-        // Add new address
-        addresses.push(newAddress);
-      } else {
-        // Update existing address
-        addresses[editingIndex] = newAddress;
-      }
-
-      saveAddresses();
-      closeModal();
-    });
-
-    function saveAddresses() {
-      user.addresses = addresses;
-      localStorage.setItem("twoDotsUser", JSON.stringify(user));
-      renderAddresses();
-    }
-
-    // Close modal when clicking outside
-    modal.addEventListener("click", function(e) {
-      if (e.target === modal) {
+      try {
+        const url    = editingId ? `${BASE}/addresses/${editingId}` : `${BASE}/addresses`;
+        const method = editingId ? "PUT" : "POST";
+        const res = await fetch(url, {
+          method, headers: authHeaders(), body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed");
         closeModal();
+        await loadAddresses();
+      } catch (err) {
+        alert(err.message || "Failed to save address.");
       }
+
+      saveBtn.textContent = "Save Address";
+      saveBtn.disabled = false;
     });
 
-    // Initialize the page
-    renderAddresses();
+    document.getElementById("addressModal").addEventListener("click", function(e) {
+      if (e.target === this) closeModal();
+    });
   </script>
 </body>
 </html>

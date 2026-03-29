@@ -7,311 +7,53 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    *, *::before, *::after { 
-      box-sizing:border-box; 
-      margin:0; 
-      padding:0; 
-    }
-    
-    body { 
-      font-family:'Inter', sans-serif; 
-      background:#fefefe; 
-      color:#1a1a1a;
-      line-height:1.6;
-      min-height:100vh;
-    }
-
-    /* Luxury Color Palette */
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter', sans-serif; background:#fefefe; color:#1a1a1a; line-height:1.6; min-height:100vh; }
     :root {
-      --primary: #000000;
-      --accent: #d4af37;
-      --secondary: #8B4513;
-      --light: #f8f8f8;
-      --dark: #1a1a1a;
-      --gray: #666;
-      --light-gray: #e5e5e5;
+      --primary: #000000; --accent: #d4af37; --light: #f8f8f8;
+      --dark: #1a1a1a; --gray: #666; --light-gray: #e5e5e5;
       --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-
-    /* Header - Luxury Style */
-    .header { 
-      position:sticky; 
-      top:0; 
-      background:rgba(255,255,255,0.98); 
-      backdrop-filter:blur(20px);
-      z-index:99; 
-      box-shadow:0 1px 20px rgba(0,0,0,0.08); 
-      border-bottom:1px solid rgba(0,0,0,0.05);
-      transition: var(--transition);
-    }
-    
-    .container { 
-      display:flex; 
-      justify-content:space-between; 
-      align-items:center; 
-      padding:18px 20px; 
-      max-width:1400px;
-      margin:0 auto;
-    }
-    
-    .back-btn { 
-      font-size:22px; 
-      cursor:pointer; 
-      color:var(--dark);
-      transition:color 0.3s ease;
-    }
-    
-    .back-btn:hover {
-      color:var(--accent);
-    }
-    
-    .logo { 
-      font-family:'Playfair Display', serif;
-      font-weight:700; 
-      font-size:24px; 
-      color:var(--primary);
-      letter-spacing:-0.5px;
-      position: relative;
-    }
-    
-    .logo span {
-      color:var(--accent);
-    }
-
-    /* Page Content */
-    .page-container {
-      max-width:600px;
-      margin:0 auto;
-      padding:40px 20px 120px;
-    }
-
-    /* Form Card - Luxury */
-    .form-card {
-      background:white;
-      border-radius:0;
-      padding:40px 32px;
-      box-shadow:0 8px 30px rgba(0,0,0,0.08);
-      border:1px solid var(--light-gray);
-      margin-bottom:40px;
-    }
-    
-    .user-info {
-      display:flex;
-      align-items:center;
-      gap:20px;
-      margin-bottom:32px;
-      padding-bottom:24px;
-      border-bottom:1px solid var(--light-gray);
-    }
-    
-    .user-info img {
-      width:60px;
-      height:60px;
-      border-radius:50%;
-      border:2px solid var(--accent);
-      object-fit:cover;
-    }
-    
-    .user-name {
-      font-family:'Playfair Display', serif;
-      font-size:20px;
-      font-weight:600;
-      color:var(--dark);
-    }
-    
-    .user-email {
-      font-size:15px;
-      color:var(--gray);
-      margin-top:4px;
-    }
-
-    textarea {
-      width:100%;
-      padding:20px;
-      border:1px solid var(--light-gray);
-      border-radius:0;
-      font-size:16px;
-      min-height:160px;
-      resize:none;
-      font-family:inherit;
-      background:#fff;
-      transition:var(--transition);
-      line-height:1.6;
-    }
-    
-    textarea:focus {
-      outline:none;
-      border-color:var(--accent);
-      box-shadow:0 0 0 2px rgba(212,175,55,0.1);
-    }
-    
-    textarea::placeholder {
-      color:var(--gray);
-      opacity:0.7;
-    }
-
-    .submit-btn {
-      background:var(--primary);
-      color:white;
-      border:none;
-      padding:18px 48px;
-      border-radius:0;
-      font-size:16px;
-      font-weight:600;
-      cursor:pointer;
-      margin-top:24px;
-      transition:var(--transition);
-      text-transform:uppercase;
-      letter-spacing:1px;
-      display:inline-flex;
-      align-items:center;
-      gap:12px;
-    }
-    
-    .submit-btn:hover {
-      background:var(--dark);
-      transform:translateY(-2px);
-      box-shadow:0 8px 25px rgba(0,0,0,0.15);
-    }
-
-    /* Empty State - Luxury */
-    .empty-state {
-      text-align:center;
-      padding:80px 20px;
-      color:var(--gray);
-      background:white;
-      border:1px solid var(--light-gray);
-    }
-    
-    .empty-state i {
-      font-size:80px;
-      margin-bottom:24px;
-      opacity:0.3;
-      color:var(--accent);
-    }
-    
-    .empty-state h3 {
-      font-family:'Playfair Display', serif;
-      font-size:24px;
-      margin:16px 0;
-      color:var(--dark);
-      font-weight:600;
-    }
-    
-    .empty-state p {
-      font-size:16px;
-      color:var(--gray);
-      max-width:400px;
-      margin:0 auto;
-    }
-
-    /* Bottom Navigation - Luxury */
-    .bottom-nav {
-      position:fixed;
-      left:20px;
-      right:20px;
-      bottom:20px;
-      height:72px;
-      background:white;
-      border-radius:20px;
-      display:flex;
-      box-shadow:0 15px 40px rgba(0,0,0,0.15);
-      z-index:1000;
-      border:1px solid var(--light-gray);
-      overflow:hidden;
-    }
-    
-    .nav-item { 
-      flex:1; 
-      text-align:center; 
-      padding:14px 0; 
-      color:var(--gray); 
-      font-size:11px; 
-      text-decoration:none;
-      transition:all 0.3s ease;
-      position:relative;
-    }
-    
-    .nav-item.active { 
-      color:var(--primary); 
-    }
-    
-    .nav-item.active::before {
-      content:'';
-      position:absolute;
-      top:0;
-      left:50%;
-      transform:translateX(-50%);
-      width:30px;
-      height:2px;
-      background:var(--accent);
-    }
-    
-    .nav-item i { 
-      font-size:20px; 
-      display:block; 
-      margin-bottom:6px; 
-    }
-    
-    .nav-item:hover {
-      color:var(--primary);
-      background:var(--light);
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width:768px) {
-      .page-container {
-        padding:30px 20px 120px;
-      }
-      
-      .form-card {
-        padding:32px 24px;
-      }
-      
-      .user-info {
-        gap:16px;
-      }
-      
-      .user-info img {
-        width:50px;
-        height:50px;
-      }
-    }
-    
+    .header { position:sticky; top:0; background:rgba(255,255,255,0.98); backdrop-filter:blur(20px); z-index:99; box-shadow:0 1px 20px rgba(0,0,0,0.08); border-bottom:1px solid rgba(0,0,0,0.05); }
+    .container { display:flex; justify-content:space-between; align-items:center; padding:18px 20px; max-width:1400px; margin:0 auto; }
+    .back-btn { font-size:22px; cursor:pointer; color:var(--dark); transition:color 0.3s ease; }
+    .back-btn:hover { color:var(--accent); }
+    .logo { font-family:'Playfair Display', serif; font-weight:700; font-size:24px; color:var(--primary); letter-spacing:-0.5px; }
+    .logo span { color:var(--accent); }
+    .page-container { max-width:600px; margin:0 auto; padding:40px 20px 120px; }
+    .form-card { background:white; border-radius:0; padding:40px 32px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border:1px solid var(--light-gray); margin-bottom:40px; }
+    .user-info { display:flex; align-items:center; gap:20px; margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid var(--light-gray); }
+    .user-info img { width:60px; height:60px; border-radius:50%; border:2px solid var(--accent); object-fit:cover; }
+    .user-name { font-family:'Playfair Display', serif; font-size:20px; font-weight:600; color:var(--dark); }
+    .user-email { font-size:15px; color:var(--gray); margin-top:4px; }
+    textarea { width:100%; padding:20px; border:1px solid var(--light-gray); border-radius:0; font-size:16px; min-height:160px; resize:none; font-family:inherit; background:#fff; transition:var(--transition); line-height:1.6; }
+    textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px rgba(212,175,55,0.1); }
+    .submit-btn { background:var(--primary); color:white; border:none; padding:18px 48px; border-radius:0; font-size:16px; font-weight:600; cursor:pointer; margin-top:24px; transition:var(--transition); text-transform:uppercase; letter-spacing:1px; display:inline-flex; align-items:center; gap:12px; }
+    .submit-btn:hover { background:var(--dark); transform:translateY(-2px); }
+    .submit-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .bottom-nav { position:fixed; left:20px; right:20px; bottom:20px; height:72px; background:white; border-radius:20px; display:flex; box-shadow:0 15px 40px rgba(0,0,0,0.15); z-index:1000; border:1px solid var(--light-gray); overflow:hidden; }
+    .nav-item { flex:1; text-align:center; padding:14px 0; color:var(--gray); font-size:11px; text-decoration:none; transition:all 0.3s ease; position:relative; }
+    .nav-item.active { color:var(--primary); }
+    .nav-item.active::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:30px; height:2px; background:var(--accent); }
+    .nav-item i { font-size:20px; display:block; margin-bottom:6px; }
+    .nav-item:hover { color:var(--primary); background:var(--light); }
     @media (max-width:480px) {
-      .page-container {
-        padding:20px 15px 120px;
-      }
-      
-      .form-card {
-        padding:24px 20px;
-      }
-      
-      .user-info {
-        flex-direction:column;
-        text-align:center;
-        gap:12px;
-      }
-      
-      .submit-btn {
-        width:100%;
-        justify-content:center;
-      }
+      .form-card { padding:24px 20px; }
+      .user-info { flex-direction:column; text-align:center; gap:12px; }
+      .submit-btn { width:100%; justify-content:center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header - Luxury Version -->
   <header class="header">
     <div class="container">
       <div class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></div>
       <div class="logo">TWO<span>•</span>DOTS</div>
-      <div style="width:22px"></div> <!-- Spacer for balance -->
+      <div style="width:22px"></div>
     </div>
   </header>
 
-  <!-- Page Content -->
   <div class="page-container">
     <div class="form-card">
       <div class="user-info">
@@ -321,64 +63,55 @@
           <div class="user-email" id="userEmail">user@example.com</div>
         </div>
       </div>
-      <textarea placeholder="Share your experience with Two Dots... We value your feedback!"></textarea>
-      <button class="submit-btn" onclick="submitFeedback()">
+      <textarea id="feedbackText" placeholder="Share your experience with Two Dots... We value your feedback!"></textarea>
+      <button class="submit-btn" onclick="submitFeedback()" id="submitBtn">
         <i class="fas fa-paper-plane"></i>
         Submit Feedback
       </button>
     </div>
-
-    <div class="empty-state">
-      <i class="fas fa-comment-dots"></i>
-      <h3>Your Voice Matters!</h3>
-      <p>Help us serve you better by sharing your experience</p>
-    </div>
   </div>
 
-<!-- BOTTOM NAVIGATION - LUXURY DESIGN -->
-<div class="bottom-nav">
-  <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
-  <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
-  <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
-  
-  <!-- SMART PROFILE BUTTON -->
-  <a href="login.html" id="profileBottomBtn" class="nav-item">
-    <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
-      <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-    <span id="profileText">Account</span>
-  </a>
-</div>
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+    <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+    <a href="login.html" id="profileBottomBtn" class="nav-item">
+      <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
+        <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <span id="profileText">Account</span>
+    </a>
+  </div>
+
   <script src="script.js"></script>
-  <!-- JavaScript - EXACTLY AS YOU HAD IT -->
   <script>
     const user = JSON.parse(localStorage.getItem("twoDotsUser") || "{}");
-    if (!user.email) location.href = "login.html";
+    if (!user.email) { location.href = "login.html"; }
 
     const avatar = user.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name||"U")}&background=00d4c4&color=fff&bold=true&size=256`;
     document.getElementById("userPic").src = avatar;
     document.getElementById("userName").textContent = user.name || "User";
     document.getElementById("userEmail").textContent = user.email || "";
 
-    function submitFeedback() {
-      const text = document.querySelector("textarea").value.trim();
+    async function submitFeedback() {
+      const text = document.getElementById("feedbackText").value.trim();
       if (!text) return alert("Please write your feedback");
 
-      const feedback = {
-        userId: user.id,
-        name: user.name,
-        email: user.email,
-        text,
-        date: new Date().toLocaleDateString("en-IN"),
-        time: new Date().toLocaleTimeString("en-IN", {hour: '2-digit', minute:'2-digit'})
-      };
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-      let all = JSON.parse(localStorage.getItem("twoDotsFeedback") || "[]");
-      all.unshift(feedback); // latest first
-      localStorage.setItem("twoDotsFeedback", JSON.stringify(all));
+      const result = await submitFeedbackAPI(text);
 
-      alert("Thank you for your valuable feedback!");
-      document.querySelector("textarea").value = "";
+      if (result.success) {
+        alert("Thank you for your valuable feedback!");
+        document.getElementById("feedbackText").value = "";
+      } else {
+        alert(result.error || "Failed to submit. Please try again.");
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Feedback';
     }
   </script>
 </body>
