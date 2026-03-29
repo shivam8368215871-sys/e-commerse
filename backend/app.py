@@ -278,6 +278,18 @@ def get_orders(current_user):
                         .order_by(Order.created_at.desc()).all()
     return jsonify([o.to_dict() for o in orders]), 200
 
+@app.route("/orders/<order_id>/cancel", methods=["PUT"])
+@token_required
+def cancel_order(current_user, order_id):
+    order = Order.query.filter_by(order_id=order_id, user_id=current_user.id).first()
+    if not order:
+        return jsonify({"error": "Order not found"}), 404
+    if order.status != "confirmed":
+        return jsonify({"error": "Only confirmed orders can be cancelled"}), 400
+    order.status = "cancelled"
+    db.session.commit()
+    return jsonify({"message": "Order cancelled successfully"}), 200
+
 
 # ── Addresses Routes ─────────────────────────────────────
 @app.route("/addresses", methods=["GET"])

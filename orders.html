@@ -226,11 +226,33 @@
     }
 
     document.getElementById('cancelNo').addEventListener('click', closeCancelModal);
-    document.getElementById('cancelYes').addEventListener('click', function() {
-      alert('Cancellation request noted for order: ' + currentCancelOrderId);
-      closeCancelModal();
-      // Reload to show updated status
-      location.reload();
+    document.getElementById('cancelYes').addEventListener('click', async function() {
+      const btn = document.getElementById('cancelYes');
+      btn.disabled = true;
+      btn.textContent = 'Cancelling...';
+
+      try {
+        const res = await fetch(`https://e-commerse-tzh7.onrender.com/orders/${currentCancelOrderId}/cancel`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('twoDotsToken')
+          }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert('Order cancelled successfully.');
+          closeCancelModal();
+          location.reload();
+        } else {
+          alert(data.error || 'Failed to cancel order.');
+        }
+      } catch (e) {
+        alert('Network error. Please try again.');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = 'Cancel Order';
     });
 
     document.getElementById('cancelModal').addEventListener('click', function(e) {
