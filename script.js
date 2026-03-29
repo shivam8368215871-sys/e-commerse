@@ -163,39 +163,23 @@ async function login() {
 
   if (!email || !pass) return alert("Please fill all fields");
 
-  btn.innerHTML = '<div class="loading-spinner"></div>Waking up server...';
+  btn.innerHTML = '<div class="loading-spinner"></div>Logging in...';
   btn.disabled = true;
 
-  // Wake up Render free tier server
-  try { await fetch(`${BASE_URL}/`); } catch(e) {}
-
-  btn.innerHTML = '<div class="loading-spinner"></div>Logging in...';
-
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 60000);
-
     const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password: pass }),
-      signal: controller.signal
+      body: JSON.stringify({ email, password: pass })
     });
-    clearTimeout(timeout);
-
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Login failed");
     localStorage.setItem("twoDotsToken", data.token);
     localStorage.setItem("twoDotsUser", JSON.stringify(data.user));
+    localStorage.removeItem("wishlist"); // clear old localStorage wishlist
     alert("Welcome back, " + (data.user.name?.split(" ")[0] || "User") + "!");
     location.href = "account.html";
-  } catch (err) {
-    if (err.name === "AbortError") {
-      alert("Server is starting up, please try again in a few seconds.");
-    } else {
-      alert(err.message);
-    }
-  }
+  } catch (err) { alert(err.message); }
 
   btn.innerHTML = 'Login Now';
   btn.disabled = false;
@@ -277,14 +261,61 @@ function updateProfileIcon() {
 }
 
 // ── WISHLIST ──────────────────────────────────────────
-window.toggleWishlist = (product) => {
-  let wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-  const exists = wishlist.find(p => p.id === product.id);
-  if (exists) { wishlist = wishlist.filter(p => p.id !== product.id); alert("Removed from wishlist"); }
-  else { wishlist.push(product); alert("Added to wishlist!"); }
-  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+async function addToWishlistAPI(product) {
+  const token = getToken();
+  if (!token) { alert("Please login to add to wishlist"); location.href = "login.html"; return false; }
+  try {
+    const res = await fetch(`${BASE_URL}/wishlist`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({
+        product_id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image
+      })
+    });
+    return res.ok;
+  } catch { return false; }
+}
+
+async function removeFromWishlistAPI(productId) {
+  try {
+    const res = await fetch(`${BASE_URL}/wishlist/${productId}`, {
+      method: "DELETE", headers: authHeaders()
+    });
+    return res.ok;
+  } catch { return false; }
+}
+
+async function checkWishlistAPI(productId) {
+  const token = getToken();
+  if (!token) return false;
+  try {
+    const res = await fetch(`${BASE_URL}/wishlist`, { headers: authHeaders() });
+    if (!res.ok) return false;
+    const items = await res.json();
+    return items.some(item => item.id === Number(productId));
+  } catch { return false; }
+}
+
+window.toggleWishlist = async (product) => {
+  const token = getToken();
+  if (!token) { alert("Please login to use wishlist"); location.href = "login.html"; return; }
+  const isIn = await checkWishlistAPI(product.id);
+  if (isIn) {
+    await removeFromWishlistAPI(product.id);
+    showCartFeedback("Removed from wishlist ♡");
+  } else {
+    await addToWishlistAPI(product);
+    showCartFeedback("Added to wishlist! ♥");
+  }
   document.dispatchEvent(new Event("wishlistUpdated"));
 };
+
+window.addToWishlistAPI    = addToWishlistAPI;
+window.removeFromWishlistAPI = removeFromWishlistAPI;
+window.checkWishlistAPI    = checkWishlistAPI;
 
 // ── PRODUCT SECTIONS ──────────────────────────────────
 let allProducts = [];

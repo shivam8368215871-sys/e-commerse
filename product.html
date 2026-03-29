@@ -1339,26 +1339,26 @@
           );
         }
 
-        let wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-        wishlist = wishlist.map(item => ({ ...item, id: Number(item.id), image: item.image || "" }));
         const currentProductId = Number(p.id);
-        const isInWishlist = wishlist.some(item => item.id === currentProductId);
-        if (isInWishlist) document.getElementById("wish").classList.add("active");
+        const heart = document.getElementById("wish");
 
-        document.getElementById("wish").onclick = () => {
-          const heart = document.getElementById("wish");
-          const exists = wishlist.some(item => item.id === currentProductId);
-          if (exists) {
-            wishlist = wishlist.filter(item => item.id !== currentProductId);
-            heart.classList.remove("active");
-            showCartFeedback("Removed from wishlist ♡");
+        // Load wishlist state from backend
+        checkWishlistAPI(currentProductId).then(isIn => {
+          if (isIn) heart.classList.add("active");
+        });
+
+        heart.onclick = async () => {
+          const isIn = heart.classList.contains("active");
+          if (isIn) {
+            const ok = await removeFromWishlistAPI(currentProductId);
+            if (ok) { heart.classList.remove("active"); showCartFeedback("Removed from wishlist ♡"); }
+            else showCartFeedback("Please login to use wishlist");
           } else {
             const fullImageUrl = new URL(p.image, window.location.href).href;
-            wishlist.push({ id: currentProductId, name: p.name, price: p.price, image: fullImageUrl });
-            heart.classList.add("active");
-            showCartFeedback("Added to wishlist!");
+            const ok = await addToWishlistAPI({ id: currentProductId, name: p.name, price: p.price, image: fullImageUrl });
+            if (ok) { heart.classList.add("active"); showCartFeedback("Added to wishlist! ♥"); }
+            else showCartFeedback("Please login to use wishlist");
           }
-          localStorage.setItem("wishlist", JSON.stringify(wishlist));
         };
 
         document.getElementById("add").onclick = () => {
