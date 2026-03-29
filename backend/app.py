@@ -120,6 +120,23 @@ class Feedback(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 
+class Wishlist(db.Model):
+    __tablename__ = "wishlist"
+    id         = db.Column(db.Integer, primary_key=True)
+    user_id    = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    product_id = db.Column(db.Integer, nullable=False)
+    name       = db.Column(db.String(200), nullable=False)
+    price      = db.Column(db.Integer, nullable=False)
+    image      = db.Column(db.String(500))
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.product_id, "name": self.name,
+            "price": self.price, "image": self.image,
+        }
+
+
 # ── JWT Helper ───────────────────────────────────────────
 def token_required(f):
     @wraps(f)
@@ -350,6 +367,48 @@ def submit_feedback(current_user):
     db.session.add(fb)
     db.session.commit()
     return jsonify({"message": "Thank you for your feedback!"}), 201
+
+
+# ── Wishlist Routes ──────────────────────────────────────
+@app.route("/wishlist", methods=["GET"])
+@token_required
+def get_wishlist(current_user):
+    items = Wishlist.query.filter_by(user_id=current_user.id)                          .order_by(Wishlist.created_at.desc()).all()
+    return jsonify([i.to_dict() for i in items]), 200
+
+
+@app.route("/wishlist", methods=["POST"])
+@token_required
+def add_to_wishlist(current_user):
+    d = request.get_json()
+    if not d:
+        return jsonify({"error": "No data"}), 400
+    product_id = d.get("id")
+    name       = d.get("name", "")
+    price      = d.get("price", 0)
+    image      = d.get("image", "")
+    if not product_id:
+        return jsonify({"error": "Product id required"}), 400
+    # Don't add duplicate
+    exists = Wishlist.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+    if exists:
+        return jsonify({"message": "Already in wishlist"}), 200
+    item = Wishlist(user_id=current_user.id, product_id=product_id,
+                    name=name, price=price, image=image)
+    db.session.add(item)
+    db.session.commit()
+    return jsonify({"message": "Added to wishlist!"}), 201
+
+
+@app.route("/wishlist/<int:product_id>", methods=["DELETE"])
+@token_required
+def remove_from_wishlist(current_user, product_id):
+    item = Wishlist.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+    if not item:
+        return jsonify({"error": "Not found"}), 404
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"message": "Removed from wishlist!"}), 200
 
 
 # ── Health Check ─────────────────────────────────────────

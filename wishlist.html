@@ -447,51 +447,71 @@
   </div>
 
   <script src="script.js"></script>
-
-  <!-- JavaScript - EXACTLY AS YOU HAD IT -->
   <script>
-    // AUTO-CONVERT RELATIVE URLs TO ABSOLUTE (this fixes everything!)
-    function fixImageUrl(url) {
-      if (!url) return "";
-      try {
-        return new URL(url, window.location.href).href;
-      } catch {
-        return url;
-      }
+    const BASE = window.BASE_URL || "https://e-commerse-tzh7.onrender.com";
+
+    function authHeaders() {
+      return {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + (localStorage.getItem("twoDotsToken") || "")
+      };
     }
 
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    function fixImageUrl(url) {
+      if (!url) return "";
+      try { return new URL(url, window.location.href).href; } catch { return url; }
+    }
+
     const grid = document.getElementById("wishlistGrid");
     const emptyState = document.getElementById("emptyState");
 
-    if (wishlist.length === 0) {
-      emptyState.style.display = "block";
-      grid.style.display = "none";
-    } else {
-      emptyState.style.display = "none";
-      grid.style.display = "grid";
+    async function loadWishlist() {
+      const token = localStorage.getItem("twoDotsToken");
+      if (!token) { location.href = "login.html"; return; }
 
-      grid.innerHTML = wishlist.map(product => `
-        <div class="wishlist-item" onclick="location.href='product.html?id=${product.id}'">
-          <img src="${fixImageUrl(product.image)}" alt="${product.name}" loading="lazy">
-          <div class="wishlist-info">
-            <div class="wishlist-name">${product.name}</div>
-            <div class="wishlist-price">₹${product.price}</div>
-          </div>
-          <button onclick="event.stopPropagation(); removeFromWishlist(${product.id})" 
-                  style="position:absolute;top:10px;right:10px;background:white;border:none;padding:10px;border-radius:50%;box-shadow:0 4px 15px rgba(0,0,0,0.2);cursor:pointer;z-index:10;">
-            <i class="fas fa-heart" style="color:#e91e63;font-size:18px;"></i>
-          </button>
-        </div>
-      `).join("");
+      try {
+        const res = await fetch(`${BASE}/wishlist`, { headers: authHeaders() });
+        if (!res.ok) throw new Error("Failed");
+        const wishlist = await res.json();
+
+        if (wishlist.length === 0) {
+          emptyState.style.display = "block";
+          grid.style.display = "none";
+        } else {
+          emptyState.style.display = "none";
+          grid.style.display = "grid";
+          grid.innerHTML = wishlist.map(product => `
+            <div class="wishlist-item" onclick="location.href='product.html?id=${product.id}'">
+              <img src="${fixImageUrl(product.image)}" alt="${product.name}" loading="lazy">
+              <div class="wishlist-info">
+                <div class="wishlist-name">${product.name}</div>
+                <div class="wishlist-price">&#8377;${product.price}</div>
+              </div>
+              <button onclick="event.stopPropagation(); removeFromWishlist(${product.id})"
+                      style="position:absolute;top:10px;right:10px;background:white;border:none;padding:10px;border-radius:50%;box-shadow:0 4px 15px rgba(0,0,0,0.2);cursor:pointer;z-index:10;">
+                <i class="fas fa-heart" style="color:#e91e63;font-size:18px;"></i>
+              </button>
+            </div>
+          `).join("");
+        }
+      } catch(e) {
+        emptyState.style.display = "block";
+        grid.style.display = "none";
+      }
     }
 
-    window.removeFromWishlist = function(id) {
-      let wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      wishlist = wishlist.filter(item => item.id != id);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      location.reload();
+    window.removeFromWishlist = async function(productId) {
+      try {
+        await fetch(`${BASE}/wishlist/${productId}`, {
+          method: "DELETE", headers: authHeaders()
+        });
+        loadWishlist();
+      } catch(e) {
+        alert("Failed to remove. Please try again.");
+      }
     };
+
+    document.addEventListener("DOMContentLoaded", loadWishlist);
   </script>
 
 </body>
