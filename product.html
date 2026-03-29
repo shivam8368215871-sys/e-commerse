@@ -1282,7 +1282,7 @@
     const urlParams = new URLSearchParams(location.search);
     const productId = urlParams.get('id');
 
-    fetch('products.json')
+    fetch('https://e-commerse-tzh7.onrender.com/products')
       .then(r => r.json())
       .then(products => {
         const p = products.find(x => x.id == productId);
