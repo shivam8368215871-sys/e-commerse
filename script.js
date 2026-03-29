@@ -163,22 +163,39 @@ async function login() {
 
   if (!email || !pass) return alert("Please fill all fields");
 
-  btn.innerHTML = '<div class="loading-spinner"></div>Logging in...';
+  btn.innerHTML = '<div class="loading-spinner"></div>Waking up server...';
   btn.disabled = true;
 
+  // Wake up Render free tier server
+  try { await fetch(`${BASE_URL}/`); } catch(e) {}
+
+  btn.innerHTML = '<div class="loading-spinner"></div>Logging in...';
+
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60000);
+
     const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password: pass })
+      body: JSON.stringify({ email, password: pass }),
+      signal: controller.signal
     });
+    clearTimeout(timeout);
+
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Login failed");
     localStorage.setItem("twoDotsToken", data.token);
     localStorage.setItem("twoDotsUser", JSON.stringify(data.user));
     alert("Welcome back, " + (data.user.name?.split(" ")[0] || "User") + "!");
     location.href = "account.html";
-  } catch (err) { alert(err.message); }
+  } catch (err) {
+    if (err.name === "AbortError") {
+      alert("Server is starting up, please try again in a few seconds.");
+    } else {
+      alert(err.message);
+    }
+  }
 
   btn.innerHTML = 'Login Now';
   btn.disabled = false;
