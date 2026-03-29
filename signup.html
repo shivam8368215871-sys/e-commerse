@@ -305,8 +305,9 @@
     </div>
   </div>
 
+ <script src="script.js"></script>
  <script>
-  // Password toggle (UNCHANGED)
+  // Password toggle
   document.getElementById('togglePassword').addEventListener('click', function() {
     const passwordInput = document.getElementById('pass');
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -314,64 +315,6 @@
     this.classList.toggle('fa-eye');
     this.classList.toggle('fa-eye-slash');
   });
-
-  async function signup() {
-    const name = document.getElementById("name").value.trim();
-    const dob = document.getElementById("dob").value;
-    const phone = document.getElementById("phone").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const pass = document.getElementById("pass").value;
-    const gender = document.getElementById("gender").value || "Not specified";
-    const signupBtn = document.getElementById("signupBtn");
-
-    if (!name || !dob || !phone || !email || !pass) {
-      return alert("Please fill all required fields");
-    }
-    if (phone.length !== 10) {
-      return alert("Enter valid 10-digit phone number");
-    }
-    if (pass.length < 6) {
-      return alert("Password must be 6+ characters");
-    }
-
-    // Loading UI (UNCHANGED STYLE)
-    signupBtn.innerHTML = '<div class="loading-spinner"></div>Creating Account...';
-    signupBtn.disabled = true;
-
-    try {
-      const res = await fetch("https://e-commerse-tzh7.onrender.com/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name,
-          dob,
-          phone,
-          email,
-          password: pass,
-          gender
-        })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Signup failed");
-      }
-
-      alert("Account created successfully!");
-      location.href = "login.html";
-
-    } catch (err) {
-      alert(err.message);
-    }
-
-    signupBtn.innerHTML = 'Create Account';
-    signupBtn.disabled = false;
-  }
-
-  // ❌ REMOVED auto redirect (important for backend)
 </script>
 </body>
 </html>

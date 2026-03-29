@@ -259,64 +259,21 @@
     </div>
   </div>
 
+  <script src="script.js"></script>
   <script>
-  // Password toggle (UNCHANGED)
-  document.getElementById('togglePassword').addEventListener('click', function() {
-    const passwordInput = document.getElementById('pass');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    this.classList.toggle('fa-eye');
-    this.classList.toggle('fa-eye-slash');
-  });
+    // Password toggle
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('pass');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
 
-  async function login() {
-    const email = document.getElementById("email").value.trim();
-    const pass = document.getElementById("pass").value;
-    const loginBtn = document.getElementById("loginBtn");
-
-    if (!email || !pass) {
-      return alert("Please fill all fields");
-    }
-
-    loginBtn.innerHTML = '<div class="loading-spinner"></div>Logging in...';
-    loginBtn.disabled = true;
-
-    try {
-      const res = await fetch("https://e-commerse-tzh7.onrender.com/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email,
-          password: pass
-        })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Login failed");
-      }
-
-      // SAVE USER (keep your system working)
-      localStorage.setItem("twoDotsUser", JSON.stringify(data.user));
-
-      alert("Welcome back, " + (data.user.name?.split(" ")[0] || "User") + "!");
-      location.href = "account.html";
-
-    } catch (err) {
-      alert(err.message);
-    }
-
-    loginBtn.innerHTML = 'Login Now';
-    loginBtn.disabled = false;
-  }
-
-  // Enter key (UNCHANGED)
-  document.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") login();
-  });
-</script>
+    // Enter key
+    document.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") login();
+    });
+  </script>
 </body>
 </html>
