@@ -523,7 +523,7 @@ Analyse the uploaded t-shirt image now and return only the JSON."""
 
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        model = genai.GenerativeModel(model_name="gemini-2.0-flash")
 
         image_part = {
             "mime_type": "image/jpeg",

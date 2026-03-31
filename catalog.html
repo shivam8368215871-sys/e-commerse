@@ -935,20 +935,149 @@
   <script src="script.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const filter = urlParams.get('filter');
-      const titleElement = document.getElementById('pageTitle');
-      if (filter && titleElement) {
-        const categoryTitles = {
-          'new':       'New Arrivals',
-          'printed':   'Printed Collection',
-          'women':     "Women's Collection",
-          'oversized': 'Oversized Tees',
-          'simple':    'Plain & Simple'
-        };
-        titleElement.textContent = categoryTitles[filter] || 'Collection';
+    document.addEventListener('DOMContentLoaded', function () {
+
+      /* ── Page title from URL param ── */
+      const urlParams   = new URLSearchParams(window.location.search);
+      const urlFilter   = urlParams.get('filter');
+      const titleEl     = document.getElementById('pageTitle');
+      const categoryTitles = {
+        'new':       'New Arrivals',
+        'printed':   'Printed Collection',
+        'women':     "Women's Collection",
+        'oversized': 'Oversized Tees',
+        'simple':    'Plain & Simple'
+      };
+      if (urlFilter && titleEl) {
+        titleEl.textContent = categoryTitles[urlFilter] || 'Collection';
       }
+
+      /* ── Wait for script.js to populate the grid ── */
+      function initCatalogControls() {
+        const grid = document.getElementById('catalogGrid');
+        if (!grid) return;
+
+        /* Collect all cards once (or re-query each time) */
+        function getAllCards() {
+          return Array.from(grid.querySelectorAll('.catalog-card'));
+        }
+
+        /* ── State ── */
+        let searchQuery  = '';
+        let minPrice     = 299;
+        let maxPrice     = 1499;
+        let activeColors = new Set(
+          Array.from(document.querySelectorAll('.color-swatches input:checked'))
+               .map(cb => cb.value)
+        );
+
+        /* ── Apply all active filters ── */
+        function applyFilters() {
+          const cards   = getAllCards();
+          let   visible = 0;
+
+          cards.forEach(card => {
+            const name     = (card.querySelector('h3')?.textContent || '').toLowerCase();
+            const priceRaw = card.querySelector('.price')?.textContent.replace(/[^\d]/g, '') || '0';
+            const price    = parseInt(priceRaw, 10);
+            const color    = (card.dataset.color || '').toLowerCase();
+
+            const matchSearch = !searchQuery || name.includes(searchQuery);
+            const matchPrice  = price >= minPrice && price <= maxPrice;
+            const matchColor  = activeColors.size === 0 || activeColors.has(color);
+
+            const show = matchSearch && matchPrice && matchColor;
+            card.style.display = show ? '' : 'none';
+            if (show) visible++;
+          });
+
+          /* Update count */
+          const countEl = document.getElementById('productCount');
+          if (countEl) countEl.textContent = visible + ' Product' + (visible !== 1 ? 's' : '');
+        }
+
+        /* ── Search input ── */
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.addEventListener('input', function () {
+            searchQuery = this.value.trim().toLowerCase();
+            applyFilters();
+          });
+        }
+
+        /* ── Colour checkboxes ── */
+        document.querySelectorAll('.color-swatches input').forEach(cb => {
+          cb.addEventListener('change', function () {
+            if (this.checked) activeColors.add(this.value);
+            else              activeColors.delete(this.value);
+            applyFilters();
+          });
+        });
+
+        /* ── Price slider ── */
+        const rangeMin  = document.getElementById('priceMin');
+        const rangeMax  = document.getElementById('priceMax');
+        const minValEl  = document.getElementById('minValue');
+        const maxValEl  = document.getElementById('maxValue');
+        const progress  = document.getElementById('progress');
+
+        function updateSlider() {
+          let lo = parseInt(rangeMin.value, 10);
+          let hi = parseInt(rangeMax.value, 10);
+          if (lo > hi) { [lo, hi] = [hi, lo]; }
+          minPrice = lo;
+          maxPrice = hi;
+          if (minValEl) minValEl.textContent = lo;
+          if (maxValEl) maxValEl.textContent = hi;
+          if (progress) {
+            const total = 1499 - 299;
+            const left  = ((lo - 299) / total) * 100;
+            const right = 100 - ((hi - 299) / total) * 100;
+            progress.style.left  = left  + '%';
+            progress.style.right = right + '%';
+          }
+          applyFilters();
+        }
+
+        if (rangeMin) rangeMin.addEventListener('input', updateSlider);
+        if (rangeMax) rangeMax.addEventListener('input', updateSlider);
+        updateSlider(); // set initial progress bar
+
+        /* ── Filter panel open / close ── */
+        const filterPanel   = document.getElementById('filterPanel');
+        const filterOverlay = document.getElementById('filterOverlay');
+        const openFilterBtn = document.getElementById('openFilter');
+        const closeFilterBtn= document.getElementById('closeFilter');
+
+        function openFilter()  {
+          filterPanel?.classList.add('active');
+          filterOverlay?.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+        function closeFilter() {
+          filterPanel?.classList.remove('active');
+          filterOverlay?.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+
+        openFilterBtn?.addEventListener('click',  openFilter);
+        closeFilterBtn?.addEventListener('click', closeFilter);
+        filterOverlay?.addEventListener('click',  closeFilter);
+
+        /* Run once to set correct count on load */
+        applyFilters();
+      }
+
+      /* ── If script.js renders cards asynchronously, poll briefly ── */
+      let attempts = 0;
+      const poll = setInterval(function () {
+        const cards = document.querySelectorAll('#catalogGrid .catalog-card');
+        if (cards.length > 0 || attempts > 30) {
+          clearInterval(poll);
+          initCatalogControls();
+        }
+        attempts++;
+      }, 200);
     });
   </script>
 </body>
