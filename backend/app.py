@@ -432,6 +432,20 @@ def remove_from_wishlist(current_user, product_id):
 
 
 
+# ── PRODUCTS ROUTE ────────────────────────────────────────────
+@app.route("/products", methods=["GET"])
+def get_products():
+    try:
+        products_path = os.path.join(os.path.dirname(__file__), "products.json")
+        with open(products_path, "r") as f:
+            products = json_lib.load(f)
+        return jsonify(products), 200
+    except FileNotFoundError:
+        return jsonify({"error": "products.json not found"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # ── VISUAL SEARCH ROUTE ────────────────────────────────────────
 @app.route("/visual-search", methods=["POST"])
 def visual_search():
@@ -523,7 +537,7 @@ Analyse the uploaded t-shirt image now and return only the JSON."""
 
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel(model_name="gemini-2.0-flash")
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
         image_part = {
             "mime_type": "image/jpeg",

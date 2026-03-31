@@ -377,10 +377,12 @@ function setupCatalogPage(products, byCategory) {
       return;
     }
     grid.innerHTML = items.map(p => `
-      <a href="product.html?id=${p.id}" class="catalog-card">
+      <a href="product.html?id=${p.id}" class="catalog-card" data-color="${(p.color||'').toLowerCase()}">
+        <div class="img-scrim"></div>
+        <div class="quick-view">Quick View</div>
         <div style="position:relative;">
           <img src="${p.image}" alt="${p.name}">
-          ${p.new ? `<div class="luxury-badge" style="position:absolute;top:16px;left:16px;background:#d4af37;color:#000;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;z-index:2;">NEW</div>` : ''}
+          ${p.new ? `<div class="luxury-badge">NEW</div>` : ''}
         </div>
         <div class="card-info">
           <h3>${p.name}</h3>
@@ -409,18 +411,7 @@ function setupCatalogPage(products, byCategory) {
     });
   });
 
-  document.getElementById("filterBtn")?.addEventListener("click", () => {
-    document.getElementById("filterPanel").classList.add("active");
-    document.getElementById("filterOverlay").classList.add("active");
-    document.body.style.overflow = "hidden";
-  });
-  ["closeFilter", "filterOverlay"].forEach(id => {
-    document.getElementById(id)?.addEventListener("click", () => {
-      document.getElementById("filterPanel").classList.remove("active");
-      document.getElementById("filterOverlay").classList.remove("active");
-      document.body.style.overflow = "auto";
-    });
-  });
+  // Filter panel is handled by catalog.html inline script
 }
 
 // ── HERO SLIDER ───────────────────────────────────────
