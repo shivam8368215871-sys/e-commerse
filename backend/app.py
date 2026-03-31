@@ -7,6 +7,10 @@ import datetime
 import os
 import json as json_lib
 from functools import wraps
+from PIL import Image
+import base64, io, re
+import google.generativeai as genai
+
 
 app = Flask(__name__)
 CORS(app, origins="*", supports_credentials=True)
@@ -426,6 +430,170 @@ def remove_from_wishlist(current_user, product_id):
     db.session.commit()
     return jsonify({"message": "Removed from wishlist!"}), 200
 
+
+
+# ── VISUAL SEARCH ROUTE ────────────────────────────────────────
+@app.route("/visual-search", methods=["POST"])
+def visual_search():
+    """
+    Accepts a multipart/form-data POST with an 'image' file.
+    Uses Google Gemini (free, 1500 req/day) to analyse the image,
+    then scores every product in products.json and returns top matches.
+    """
+    import base64, io, re
+    try:
+        from PIL import Image
+    except ImportError:
+        return jsonify({"error": "Pillow not installed. Add Pillow to requirements.txt"}), 500
+
+    # ── 1. Get image from request ───────────────────────────────
+    if "image" not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+
+    file = request.files["image"]
+    if not file or file.filename == "":
+        return jsonify({"error": "Empty file"}), 400
+
+    allowed = {"image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"}
+    if file.content_type not in allowed:
+        return jsonify({"error": "Unsupported image type"}), 415
+
+    # ── 2. Read & resize image for efficiency ───────────────────
+    try:
+        img = Image.open(file.stream).convert("RGB")
+        img.thumbnail((512, 512))
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=85)
+        image_bytes = buf.getvalue()
+    except Exception as e:
+        return jsonify({"error": f"Could not process image: {str(e)}"}), 400
+
+    # ── 3. Load product catalogue ───────────────────────────────
+    try:
+        products_path = os.path.join(os.path.dirname(__file__), "products.json")
+        with open(products_path, "r") as f:
+            all_products = json_lib.load(f)
+    except FileNotFoundError:
+        return jsonify({"error": "products.json not found"}), 500
+
+    # ── 4. Build a compact product list for the AI prompt ───────
+    product_list = "\n".join([
+        f"ID:{p['id']} | {p['name']} | color:{p['color']} | category:{p['category']} | fit:{p.get('fit','')}"
+        for p in all_products
+    ])
+
+    # ── 5. Call Google Gemini API ────────────────────────────────
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+    if not GEMINI_API_KEY:
+        results = rule_based_match(all_products)
+        return jsonify({
+            "results": results[:8],
+            "analysis": {"color": "unknown", "category": "unknown", "fit": "unknown"},
+            "note": "GEMINI_API_KEY not set - showing popular items as fallback"
+        })
+
+    prompt = f"""You are a fashion AI for a t-shirt store called Two Dots.
+A customer uploaded a t-shirt image. Analyse the image and return ONLY valid JSON — no markdown, no explanation.
+
+The JSON must have this exact structure:
+{{
+  "analysis": {{
+    "color": "<dominant color of the t-shirt, one of: black, white, navy, red, grey, green, pink, purple, orange, yellow, brown>",
+    "category": "<one of: printed, oversized, women, simple>",
+    "fit": "<one of: Oversized Fit, Regular Fit, Relaxed Fit, or empty string if unsure>"
+  }},
+  "scores": {{
+    "1": <0-100>,
+    "2": <0-100>,
+    ...
+  }}
+}}
+
+The "scores" object must include a score (0-100) for every product ID below.
+Score rules:
+- 80-100 = very similar (same color + same category + similar fit)
+- 60-79  = good match  (same color OR same category)
+- 40-59  = some similarity (close color or related category)
+- 0-39   = low similarity
+
+Here are all products:
+{product_list}
+
+Analyse the uploaded t-shirt image now and return only the JSON."""
+
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+
+        image_part = {
+            "mime_type": "image/jpeg",
+            "data":      image_bytes
+        }
+
+        response = model.generate_content(
+            [image_part, prompt],
+            generation_config={
+                "temperature":       0.1,
+                "max_output_tokens": 2048,
+            }
+        )
+
+        raw_text = response.text.strip()
+        raw_text = re.sub(r"^```(?:json)?\s*", "", raw_text, flags=re.MULTILINE)
+        raw_text = re.sub(r"\s*```\s*$",       "", raw_text, flags=re.MULTILINE)
+        raw_text = raw_text.strip()
+
+        ai_data = json_lib.loads(raw_text)
+
+    except json_lib.JSONDecodeError:
+        ai_data = None
+    except Exception as e:
+        error_msg = str(e)
+        if "API_KEY_INVALID" in error_msg or "API key not valid" in error_msg:
+            return jsonify({"error": "Invalid Gemini API key. Check GEMINI_API_KEY in Render environment variables."}), 401
+        if "RESOURCE_EXHAUSTED" in error_msg or "quota" in error_msg.lower():
+            results = rule_based_match(all_products)
+            return jsonify({
+                "results": results[:8],
+                "analysis": {},
+                "note": "Daily free limit reached - showing popular items"
+            })
+        return jsonify({"error": f"AI service error: {error_msg}"}), 502
+
+    # ── 6. Merge AI scores with product data ─────────────────────
+    if ai_data and "scores" in ai_data:
+        scores_map = {str(k): v for k, v in ai_data["scores"].items()}
+        analysis   = ai_data.get("analysis", {})
+
+        scored = []
+        for p in all_products:
+            score = int(scores_map.get(str(p["id"]), 0))
+            if score > 0:
+                scored.append({**p, "score": score})
+
+        scored.sort(key=lambda x: x["score"], reverse=True)
+        top_results = scored[:8]
+
+    else:
+        top_results = rule_based_match(all_products)
+        analysis    = {}
+
+    return jsonify({
+        "results":  top_results,
+        "analysis": analysis
+    })
+
+
+def rule_based_match(products):
+    """
+    Simple fallback: return new arrivals + random mix when AI is unavailable.
+    """
+    import random
+    new_items = [p for p in products if p.get("new")]
+    rest      = [p for p in products if not p.get("new")]
+    random.shuffle(rest)
+    combined  = new_items + rest
+    return [{**p, "score": 75 if p.get("new") else 50} for p in combined[:8]]
 
 # ── Health Check ─────────────────────────────────────────
 @app.route("/", methods=["GET"])

@@ -1,92 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>My Orders - Two Dots</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Inter', sans-serif; background:#fefefe; color:#1a1a1a; line-height:1.6; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fefefe;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
     :root {
-      --primary: #000000; --accent: #d4af37; --light: #f8f8f8;
-      --dark: #1a1a1a; --gray: #666; --light-gray: #e5e5e5;
+      --primary: #000000;
+      --accent: #d4af37;
+      --light: #f8f8f8;
+      --dark: #1a1a1a;
+      --gray: #666;
+      --light-gray: #e5e5e5;
       --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .header { position:sticky; top:0; background:rgba(255,255,255,0.98); backdrop-filter:blur(20px); z-index:99; box-shadow:0 1px 20px rgba(0,0,0,0.08); border-bottom:1px solid rgba(0,0,0,0.05); }
-    .container { display:flex; justify-content:space-between; align-items:center; padding:18px 20px; max-width:1400px; margin:0 auto; }
-    .back-btn { font-size:22px; cursor:pointer; color:var(--dark); transition:color 0.3s ease; }
-    .back-btn:hover { color:var(--accent); }
-    .page-title { font-family:'Playfair Display', serif; font-size:24px; font-weight:600; color:var(--dark); letter-spacing:-0.5px; }
-    .spacer { width:25px; }
-    .content-container { max-width:800px; margin:0 auto; padding:30px 20px 120px; }
-    .empty-state { text-align:center; padding:100px 20px; color:var(--gray); }
-    .empty-state i { font-size:80px; color:var(--light-gray); margin-bottom:24px; opacity:0.5; }
-    .empty-state h2 { font-family:'Playfair Display', serif; font-size:28px; margin-bottom:16px; font-weight:600; color:var(--dark); }
-    .empty-state p { margin-bottom:32px; color:var(--gray); font-size:16px; max-width:400px; margin-left:auto; margin-right:auto; }
-    .shop-now-btn { display:inline-block; background:var(--primary); color:white; padding:16px 40px; border-radius:0; text-decoration:none; font-weight:600; font-size:16px; transition:all 0.3s; text-transform:uppercase; letter-spacing:1px; }
-    .shop-now-btn:hover { background:var(--dark); transform:translateY(-2px); }
-    .order-card { background:white; border-radius:0; padding:30px; margin-bottom:24px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border:1px solid var(--light-gray); transition:var(--transition); }
-    .order-card:hover { transform:translateY(-4px); box-shadow:0 15px 50px rgba(0,0,0,0.12); }
-    .order-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid var(--light-gray); }
-    .order-id { font-weight:600; font-size:18px; color:var(--dark); }
-    .order-date { color:var(--gray); font-size:15px; margin-top:4px; }
-    .order-status { padding:8px 20px; border-radius:0; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
-    .status-confirmed { background:rgba(212,175,55,0.1); color:var(--accent); border:1px solid rgba(212,175,55,0.3); }
-    .status-shipped { background:rgba(255,152,0,0.1); color:#ff9800; border:1px solid rgba(255,152,0,0.3); }
-    .status-delivered { background:rgba(76,175,80,0.1); color:#4caf50; border:1px solid rgba(76,175,80,0.3); }
-    .status-cancelled { background:rgba(244,67,54,0.1); color:#f44336; border:1px solid rgba(244,67,54,0.3); }
-    .order-item { display:flex; margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid var(--light-gray); }
-    .order-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
-    .item-image { width:100px; height:100px; border-radius:0; overflow:hidden; margin-right:20px; background:var(--light); border:1px solid var(--light-gray); flex-shrink:0; }
-    .item-image img { width:100%; height:100%; object-fit:cover; }
-    .item-details { flex:1; }
-    .item-name { font-weight:600; margin-bottom:8px; color:var(--dark); font-size:16px; }
-    .item-size, .item-qty { color:var(--gray); font-size:14px; margin-bottom:4px; }
-    .item-price { font-weight:700; color:var(--dark); font-size:16px; margin-top:8px; }
-    .order-footer { display:flex; justify-content:space-between; align-items:center; margin-top:24px; padding-top:24px; border-top:1px solid var(--light-gray); }
-    .order-total { font-weight:700; font-size:20px; color:var(--dark); }
-    .order-actions { display:flex; gap:12px; }
-    .btn { padding:12px 24px; border-radius:0; font-weight:600; font-size:14px; cursor:pointer; border:none; transition:all 0.3s; text-transform:uppercase; letter-spacing:0.5px; display:inline-flex; align-items:center; gap:8px; }
-    .btn-secondary { background:var(--light); color:var(--dark); border:1px solid var(--light-gray); }
-    .btn-secondary:hover { background:var(--light-gray); }
-    .btn-danger { background:rgba(244,67,54,0.1); color:#f44336; border:1px solid rgba(244,67,54,0.3); }
-    .btn-danger:hover { background:rgba(244,67,54,0.2); }
-    .loading-state { text-align:center; padding:80px 20px; color:var(--gray); }
-    .loading-spinner { display:inline-block; width:40px; height:40px; border:3px solid var(--light-gray); border-top:3px solid var(--accent); border-radius:50%; animation:spin 1s linear infinite; margin-bottom:16px; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    .cancel-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; padding:20px; }
-    .cancel-modal-content { background:white; border-radius:0; width:100%; max-width:450px; padding:32px; text-align:center; border:1px solid var(--light-gray); box-shadow:0 20px 60px rgba(0,0,0,0.2); }
-    .cancel-modal h2 { font-family:'Playfair Display', serif; margin-bottom:16px; color:var(--dark); font-size:24px; font-weight:600; }
-    .cancel-modal p { margin-bottom:24px; color:var(--gray); line-height:1.6; font-size:15px; }
-    .cancel-modal-actions { display:flex; gap:12px; justify-content:center; }
-    .cancel-reason { width:100%; padding:16px; border:1px solid var(--light-gray); border-radius:0; margin-bottom:24px; font-family:'Inter', sans-serif; resize:vertical; min-height:100px; font-size:15px; }
-    .cancel-reason:focus { outline:none; border-color:var(--accent); }
-    .bottom-nav { position:fixed; left:20px; right:20px; bottom:20px; height:72px; background:white; border-radius:20px; display:flex; box-shadow:0 15px 40px rgba(0,0,0,0.15); z-index:1000; border:1px solid var(--light-gray); overflow:hidden; }
-    .nav-item { flex:1; text-align:center; padding:14px 0; color:var(--gray); font-size:11px; text-decoration:none; transition:all 0.3s ease; position:relative; }
-    .nav-item.active { color:var(--primary); }
-    .nav-item.active::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:30px; height:2px; background:var(--accent); }
-    .nav-item i { font-size:20px; display:block; margin-bottom:6px; }
-    .nav-item:hover { color:var(--primary); background:var(--light); }
-    @media (max-width:768px) {
-      .content-container { padding:20px 16px 120px; }
-      .order-card { padding:24px; }
-      .order-header { flex-direction:column; align-items:flex-start; gap:12px; }
-      .order-footer { flex-direction:column; align-items:flex-start; gap:20px; }
-      .order-actions { width:100%; justify-content:space-between; }
-      .cancel-modal-actions { flex-direction:column; }
-      .cancel-modal-actions .btn { width:100%; justify-content:center; }
-      .item-image { width:80px; height:80px; margin-right:16px; }
+
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 99;
+      box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .back-btn {
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--dark);
+      transition: color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--accent);
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+    }
+
+    .spacer {
+      width: 25px;
+    }
+
+    .content-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 20px 120px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 100px 20px;
+      color: var(--gray);
+    }
+
+    .empty-state i {
+      font-size: 80px;
+      color: var(--light-gray);
+      margin-bottom: 24px;
+      opacity: 0.5;
+    }
+
+    .empty-state h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .empty-state p {
+      margin-bottom: 32px;
+      color: var(--gray);
+      font-size: 16px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .shop-now-btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 16px 40px;
+      border-radius: 0;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .shop-now-btn:hover {
+      background: var(--dark);
+      transform: translateY(-2px);
+    }
+
+    .order-card {
+      background: white;
+      border-radius: 0;
+      padding: 30px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--light-gray);
+      transition: var(--transition);
+    }
+
+    .order-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .order-id {
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--dark);
+    }
+
+    .order-date {
+      color: var(--gray);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    .order-status {
+      padding: 8px 20px;
+      border-radius: 0;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-confirmed {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .status-shipped {
+      background: rgba(255, 152, 0, 0.1);
+      color: #ff9800;
+      border: 1px solid rgba(255, 152, 0, 0.3);
+    }
+
+    .status-delivered {
+      background: rgba(76, 175, 80, 0.1);
+      color: #4caf50;
+      border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .status-cancelled {
+      background: rgba(244, 67, 54, 0.1);
+      color: #f44336;
+      border: 1px solid rgba(244, 67, 54, 0.3);
+    }
+
+    .order-item {
+      display: flex;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .order-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .item-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 0;
+      overflow: hidden;
+      margin-right: 20px;
+      background: var(--light);
+      border: 1px solid var(--light-gray);
+      flex-shrink: 0;
+    }
+
+    .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+      font-size: 16px;
+    }
+
+    .item-size,
+    .item-qty {
+      color: var(--gray);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .item-price {
+      font-weight: 700;
+      color: var(--dark);
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--light-gray);
+    }
+
+    .order-total {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--dark);
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 0;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      background: var(--light);
+      color: var(--dark);
+      border: 1px solid var(--light-gray);
+    }
+
+    .btn-secondary:hover {
+      background: var(--light-gray);
+    }
+
+    .btn-danger {
+      background: rgba(244, 67, 54, 0.1);
+      color: #f44336;
+      border: 1px solid rgba(244, 67, 54, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: rgba(244, 67, 54, 0.2);
+    }
+
+    .loading-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--gray);
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--light-gray);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .cancel-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .cancel-modal-content {
+      background: white;
+      border-radius: 0;
+      width: 100%;
+      max-width: 450px;
+      padding: 32px;
+      text-align: center;
+      border: 1px solid var(--light-gray);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .cancel-modal h2 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 16px;
+      color: var(--dark);
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .cancel-modal p {
+      margin-bottom: 24px;
+      color: var(--gray);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .cancel-modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .cancel-reason {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid var(--light-gray);
+      border-radius: 0;
+      margin-bottom: 24px;
+      font-family: 'Inter', sans-serif;
+      resize: vertical;
+      min-height: 100px;
+      font-size: 15px;
+    }
+
+    .cancel-reason:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      height: 72px;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      border: 1px solid var(--light-gray);
+      overflow: hidden;
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 14px 0;
+      color: var(--gray);
+      font-size: 11px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .nav-item i {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .nav-item:hover {
+      color: var(--primary);
+      background: var(--light);
+    }
+
+    @media (max-width:768px) {
+      .content-container {
+        padding: 20px 16px 120px;
+      }
+
+      .order-card {
+        padding: 24px;
+      }
+
+      .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .order-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      .order-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .cancel-modal-actions {
+        flex-direction: column;
+      }
+
+      .cancel-modal-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .item-image {
+        width: 80px;
+        height: 80px;
+        margin-right: 16px;
+      }
+    }
+
     @media (max-width:480px) {
-      .order-item { flex-direction:column; }
-      .item-image { width:100%; height:200px; margin-right:0; margin-bottom:16px; }
-      .order-actions { flex-direction:column; width:100%; }
-      .btn { width:100%; justify-content:center; }
+      .order-item {
+        flex-direction: column;
+      }
+
+      .item-image {
+        width: 100%;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 16px;
+      }
+
+      .order-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header class="header">
@@ -121,8 +550,10 @@
     <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
     <a href="cart.html" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
     <a href="login.html" id="profileBottomBtn" class="nav-item">
-      <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
-        <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+      <div id="profileAvatar"
+        style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--accent);">
+        <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?"
+          style="width:100%;height:100%;object-fit:cover;">
       </div>
       <span id="profileText">Account</span>
     </a>
@@ -132,7 +563,7 @@
   <script>
     let currentCancelOrderId = null;
 
-    document.addEventListener('DOMContentLoaded', async function() {
+    document.addEventListener('DOMContentLoaded', async function () {
       updateCartBadge();
       updateProfileIcon();
 
@@ -226,7 +657,7 @@
     }
 
     document.getElementById('cancelNo').addEventListener('click', closeCancelModal);
-    document.getElementById('cancelYes').addEventListener('click', async function() {
+    document.getElementById('cancelYes').addEventListener('click', async function () {
       const btn = document.getElementById('cancelYes');
       btn.disabled = true;
       btn.textContent = 'Cancelling...';
@@ -255,13 +686,14 @@
       btn.innerHTML = 'Cancel Order';
     });
 
-    document.getElementById('cancelModal').addEventListener('click', function(e) {
+    document.getElementById('cancelModal').addEventListener('click', function (e) {
       if (e.target === this) closeCancelModal();
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeCancelModal();
     });
   </script>
 </body>
+
 </html>

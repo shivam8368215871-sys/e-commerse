@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Visual Search • Two Dots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; overflow-x: hidden; }
+
+    :root {
+      --primary:     #0a0a0a;
+      --ivory:       #f7f3ec;
+      --gold:        #b8964e;
+      --gold-light:  #d4af6a;
+      --gold-pale:   #e8d5a8;
+      --gold-muted:  rgba(184,150,78,0.10);
+      --cream:       #faf8f4;
+      --warm-gray:   #968e84;
+      --border:      rgba(0,0,0,0.07);
+      --border-warm: rgba(184,150,78,0.18);
+      --shadow-sm:   0 4px 20px rgba(0,0,0,0.07);
+      --shadow-md:   0 10px 40px rgba(0,0,0,0.10);
+      --radius-sm:   8px;
+      --radius-md:   16px;
+      --radius-lg:   24px;
+      --font-head:   'Cormorant Garamond', Georgia, serif;
+      --font-body:   'DM Sans', sans-serif;
+      --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.55;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--primary);
+      line-height: 1.65;
+      padding-bottom: 110px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(184,150,78,0.35); }
+      70%  { box-shadow: 0 0 0 14px rgba(184,150,78,0); }
+      100% { box-shadow: 0 0 0 0 rgba(184,150,78,0); }
+    }
+
+    /* ── HEADER ── */
+    .vs-header {
+      position: sticky; top: 0;
+      background: rgba(250,248,244,0.88);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      z-index: 98;
+      border-bottom: 1px solid var(--border-warm);
+    }
+    .vs-header::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 50%;
+      transform: translateX(-50%);
+      width: 96px; height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+    }
+    .vs-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 15px 20px; max-width: 1400px; margin: 0 auto;
+    }
+    .back-btn {
+      width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      font-size: 17px; color: var(--primary); cursor: pointer;
+      transition: all 0.28s ease;
+    }
+    .back-btn:hover {
+      background: var(--gold-muted); border-color: var(--border-warm);
+      color: var(--gold); transform: translateX(-2px);
+    }
+    .vs-title h1 {
+      font-family: var(--font-head);
+      font-size: 22px; font-weight: 500; font-style: italic;
+      color: var(--primary); letter-spacing: -0.3px; text-align: center;
+    }
+    .vs-subtitle {
+      font-size: 10px; color: var(--warm-gray);
+      margin-top: 3px; text-align: center;
+      letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+    }
+    .cart-icon-link {
+      position: relative; display: inline-flex;
+      align-items: center; justify-content: center;
+      width: 42px; height: 42px;
+      color: var(--primary); font-size: 18px;
+      transition: color 0.3s ease;
+    }
+    .cart-icon-link:hover { color: var(--gold); }
+    .cart-badge {
+      position: absolute; top: 2px; right: 2px;
+      background: var(--gold); color: white;
+      font-size: 9px; font-weight: 700;
+      width: 17px; height: 17px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+      border: 2px solid white;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .vs-container { max-width: 680px; margin: 0 auto; padding: 24px 20px; }
+
+    /* ── UPLOAD ZONE ── */
+    .upload-zone {
+      border: 2px dashed var(--gold-pale);
+      border-radius: var(--radius-lg);
+      background: white;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-out);
+      position: relative;
+      animation: fadeUp 0.5s var(--ease-out) both;
+      overflow: hidden;
+    }
+    .upload-zone::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(184,150,78,0.03), transparent);
+      pointer-events: none;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--gold);
+      background: rgba(184,150,78,0.03);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(184,150,78,0.12);
+    }
+    .upload-zone.drag-over { border-style: solid; }
+
+    .upload-icon-wrap {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(184,150,78,0.15), rgba(184,150,78,0.05));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      animation: pulse-ring 2.5s infinite;
+    }
+    .upload-icon-wrap i { font-size: 32px; color: var(--gold); }
+
+    .upload-title {
+      font-family: var(--font-head);
+      font-size: 26px; font-weight: 600; font-style: italic;
+      color: var(--primary); margin-bottom: 8px;
+    }
+    .upload-desc { font-size: 14px; color: var(--warm-gray); line-height: 1.6; margin-bottom: 24px; }
+
+    .upload-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: white; border: none;
+      padding: 14px 32px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 600; font-family: var(--font-body);
+      cursor: pointer; letter-spacing: 0.5px;
+      transition: all 0.3s var(--ease-out);
+      box-shadow: 0 6px 20px rgba(184,150,78,0.30);
+    }
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(184,150,78,0.40);
+    }
+
+    .upload-hint {
+      margin-top: 16px; font-size: 12px; color: var(--warm-gray);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .upload-hint i { color: var(--gold); font-size: 11px; }
+
+    #fileInput { display: none; }
+
+    /* ── PREVIEW ── */
+    .preview-section {
+      display: none;
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-warm);
+      margin-bottom: 24px;
+      animation: fadeUp 0.45s var(--ease-out) both;
+    }
+    .preview-section.show { display: block; }
+
+    .preview-inner {
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 20px 0;
+    }
+    .preview-thumb {
+      width: 90px; height: 110px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      border: 2px solid var(--gold-pale);
+      flex-shrink: 0;
+    }
+    .preview-info { flex: 1; }
+    .preview-info h3 {
+      font-family: var(--font-head); font-size: 18px;
+      font-weight: 600; color: var(--primary); margin-bottom: 6px;
+    }
+    .preview-info p { font-size: 13px; color: var(--warm-gray); line-height: 1.5; }
+
+    .preview-actions {
+      display: flex; gap: 10px;
+      padding: 16px 20px 20px;
+    }
+    .btn-search {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: linear-gradient(135deg, var(--primary), #2a2a2a);
+      color: white; border: none;
+      padding: 14px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 600; font-family: var(--font-body);
+      cursor: pointer; letter-spacing: 0.3px;
+      transition: all 0.3s var(--ease-out);
+    }
+    .btn-search:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .btn-search:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-clear {
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(184,150,78,0.08);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-sm);
+      color: var(--warm-gray); font-size: 16px;
+      cursor: pointer; transition: all 0.25s ease;
+    }
+    .btn-clear:hover { background: #fee2e2; color: #ef4444; border-color: #fecaca; }
+
+    /* ── LOADING STATE ── */
+    .loading-state {
+      display: none; text-align: center;
+      padding: 48px 24px;
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-warm);
+      margin-bottom: 24px;
+    }
+    .loading-state.show { display: block; }
+
+    .ai-spinner {
+      width: 56px; height: 56px;
+      border: 3px solid var(--gold-pale);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      animation: spin 0.9s linear infinite;
+    }
+    .loading-title {
+      font-family: var(--font-head); font-size: 22px;
+      font-style: italic; color: var(--primary); margin-bottom: 8px;
+    }
+    .loading-steps { list-style: none; margin-top: 16px; }
+    .loading-steps li {
+      font-size: 13px; color: var(--warm-gray);
+      padding: 5px 0;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: color 0.3s ease;
+    }
+    .loading-steps li.active { color: var(--gold); font-weight: 600; }
+    .loading-steps li.done { color: #16a34a; }
+    .loading-steps li i { font-size: 12px; }
+    .shimmer-bar {
+      height: 6px; border-radius: 3px;
+      background: linear-gradient(90deg, var(--gold-pale) 25%, var(--gold-light) 50%, var(--gold-pale) 75%);
+      background-size: 400px 100%;
+      animation: shimmer 1.5s infinite;
+      margin: 20px auto 0; max-width: 260px; border-radius: 3px;
+    }
+
+    /* ── RESULTS ── */
+    .results-section { display: none; }
+    .results-section.show { display: block; animation: fadeUp 0.5s var(--ease-out) both; }
+
+    .results-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .results-title {
+      font-family: var(--font-head); font-size: 22px;
+      font-weight: 600; font-style: italic; color: var(--primary);
+    }
+    .results-count {
+      font-size: 12px; color: var(--warm-gray);
+      background: var(--gold-muted);
+      border: 1px solid var(--border-warm);
+      padding: 4px 12px; border-radius: 20px;
+      font-weight: 600; letter-spacing: 0.5px;
+    }
+
+    /* AI Analysis pill */
+    .ai-analysis {
+      background: linear-gradient(135deg, rgba(184,150,78,0.08), rgba(184,150,78,0.03));
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .ai-analysis i { color: var(--gold); font-size: 18px; margin-top: 2px; flex-shrink: 0; }
+    .ai-analysis-text { font-size: 13px; color: var(--warm-gray); line-height: 1.6; }
+    .ai-analysis-text strong { color: var(--primary); font-weight: 600; }
+
+    /* Results grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .result-card {
+      background: white;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.38s var(--ease-out), box-shadow 0.38s ease;
+      text-decoration: none; color: inherit;
+      position: relative;
+      animation: fadeUp 0.5s var(--ease-out) both;
+    }
+    .result-card:nth-child(1) { animation-delay: 0.05s; }
+    .result-card:nth-child(2) { animation-delay: 0.10s; }
+    .result-card:nth-child(3) { animation-delay: 0.15s; }
+    .result-card:nth-child(4) { animation-delay: 0.20s; }
+    .result-card:nth-child(n+5) { animation-delay: 0.25s; }
+
+    .result-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 14px 44px rgba(0,0,0,0.12),
+                  0 0 0 1.5px var(--gold-light);
+    }
+
+    .result-card img {
+      width: 100%; height: 220px;
+      object-fit: cover; object-position: center top;
+      display: block;
+      transition: transform 0.55s var(--ease-out);
+    }
+    .result-card:hover img { transform: scale(1.04); }
+
+    /* Match badge */
+    .match-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      color: white; font-size: 10px; font-weight: 700;
+      padding: 4px 8px; border-radius: 20px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .match-badge.high { background: rgba(184,150,78,0.88); }
+    .match-badge.med  { background: rgba(100,100,100,0.80); }
+
+    .result-info { padding: 14px 14px 16px; }
+    .result-name {
+      font-size: 13px; font-weight: 600; color: var(--primary);
+      margin-bottom: 4px; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .result-tags {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;
+    }
+    .result-tag {
+      font-size: 10px; color: var(--gold);
+      background: var(--gold-muted);
+      border: 1px solid var(--border-warm);
+      padding: 2px 8px; border-radius: 10px;
+      font-weight: 600; text-transform: capitalize; letter-spacing: 0.3px;
+    }
+    .result-price-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .result-price { font-size: 16px; font-weight: 700; color: var(--primary); }
+    .result-old-price {
+      font-size: 11px; color: var(--warm-gray);
+      text-decoration: line-through; margin-left: 5px;
+    }
+    .result-discount {
+      font-size: 10px; font-weight: 700; color: #16a34a;
+      background: #dcfce7; padding: 2px 7px; border-radius: 10px;
+    }
+
+    /* Quick add btn */
+    .quick-add {
+      width: 32px; height: 32px;
+      background: var(--primary); color: white;
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; cursor: pointer; flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+    .quick-add:hover { background: var(--gold); transform: scale(1.1); }
+
+    /* ── EMPTY / ERROR STATE ── */
+    .state-box {
+      display: none; text-align: center;
+      background: white; border-radius: var(--radius-lg);
+      border: 1px solid var(--border-warm);
+      padding: 48px 24px; margin-bottom: 24px;
+    }
+    .state-box.show { display: block; animation: fadeIn 0.4s ease both; }
+    .state-box i { font-size: 48px; color: var(--gold-pale); margin-bottom: 16px; }
+    .state-box h3 {
+      font-family: var(--font-head); font-size: 22px;
+      font-style: italic; color: var(--primary); margin-bottom: 8px;
+    }
+    .state-box p { font-size: 14px; color: var(--warm-gray); line-height: 1.6; }
+
+    /* ── HOW IT WORKS ── */
+    .how-it-works {
+      background: white; border-radius: var(--radius-lg);
+      border: 1px solid var(--border-warm);
+      padding: 28px 24px; margin-top: 24px;
+      animation: fadeUp 0.6s var(--ease-out) 0.1s both;
+    }
+    .hiw-title {
+      font-family: var(--font-head); font-size: 20px;
+      font-style: italic; font-weight: 500;
+      color: var(--primary); margin-bottom: 20px;
+      text-align: center;
+    }
+    .hiw-steps { display: flex; gap: 16px; }
+    .hiw-step {
+      flex: 1; text-align: center;
+    }
+    .hiw-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: white; font-size: 14px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+    }
+    .hiw-step h4 { font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+    .hiw-step p  { font-size: 11px; color: var(--warm-gray); line-height: 1.5; }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; left: 12px; right: 12px; bottom: 14px;
+      height: 68px; background: white; border-radius: 24px;
+      display: flex; box-shadow: 0 12px 35px rgba(0,0,0,0.2); z-index: 1000;
+    }
+    .nav-item {
+      flex: 1; text-align: center; padding: 10px 0;
+      color: var(--warm-gray); font-size: 11px; text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .nav-item.active { color: var(--primary); }
+    .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+    .nav-item:hover { color: var(--primary); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--primary); color: white;
+      padding: 12px 24px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 500;
+      opacity: 0; transition: all 0.3s ease; z-index: 2000;
+      white-space: nowrap; pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 380px) {
+      .hiw-steps { flex-direction: column; gap: 12px; }
+      .hiw-step { display: flex; align-items: center; gap: 12px; text-align: left; }
+      .hiw-step h4, .hiw-step p { text-align: left; }
+    }
+    @media (min-width: 768px) {
+      .vs-container { padding: 28px 36px; }
+      .results-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      body { padding-bottom: 0; }
+      .results-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="vs-header">
+    <div class="vs-nav">
+      <div class="back-btn" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i>
+      </div>
+      <div class="vs-title">
+        <h1>AI Visual Search</h1>
+        <span class="vs-subtitle">Find Similar Styles</span>
+      </div>
+      <a href="cart.html" class="cart-icon-link">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="vs-container">
+
+    <!-- UPLOAD ZONE -->
+    <div class="upload-zone" id="uploadZone">
+      <div class="upload-icon-wrap">
+        <i class="fas fa-camera-retro"></i>
+      </div>
+      <div class="upload-title">Upload a T-Shirt Photo</div>
+      <p class="upload-desc">
+        Snap or upload any t-shirt image and our AI will<br>
+        find the most similar styles from our collection.
+      </p>
+      <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+        <i class="fas fa-cloud-upload-alt"></i> Choose Image
+      </button>
+      <div class="upload-hint">
+        <i class="fas fa-info-circle"></i>
+        Supports JPG, PNG, WEBP • Best results with clear, well-lit photos
+      </div>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <!-- IMAGE PREVIEW -->
+    <div class="preview-section" id="previewSection">
+      <div class="preview-inner">
+        <img id="previewThumb" src="" alt="Uploaded image" class="preview-thumb"/>
+        <div class="preview-info">
+          <h3>Image Ready</h3>
+          <p id="previewFileName">Ready to search your perfect match</p>
+          <p style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600;">
+            <i class="fas fa-magic"></i> AI will analyse color, style & design
+          </p>
+        </div>
+      </div>
+      <div class="preview-actions">
+        <button class="btn-search" id="searchBtn" onclick="runVisualSearch()">
+          <i class="fas fa-search"></i> Find Similar Styles
+        </button>
+        <button class="btn-clear" onclick="clearAll()" title="Clear">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div class="loading-state" id="loadingState">
+      <div class="ai-spinner"></div>
+      <div class="loading-title">AI is analysing your image…</div>
+      <ul class="loading-steps">
+        <li id="step1" class="active"><i class="fas fa-circle-notch fa-spin"></i> Reading image properties</li>
+        <li id="step2"><i class="fas fa-circle"></i> Detecting colors & patterns</li>
+        <li id="step3"><i class="fas fa-circle"></i> Matching to our collection</li>
+        <li id="step4"><i class="fas fa-circle"></i> Ranking best matches</li>
+      </ul>
+      <div class="shimmer-bar"></div>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div class="state-box" id="errorState">
+      <i class="fas fa-exclamation-circle"></i>
+      <h3>Something went wrong</h3>
+      <p id="errorMsg">Could not analyse the image. Please try again with a different photo.</p>
+    </div>
+
+    <!-- NO RESULTS STATE -->
+    <div class="state-box" id="noResultsState">
+      <i class="fas fa-search"></i>
+      <h3>No matches found</h3>
+      <p>We couldn't find a close match for this image. Try a clearer photo or browse our full collection.</p>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-section" id="resultsSection">
+      <div class="results-header">
+        <div class="results-title">Similar Styles</div>
+        <div class="results-count" id="resultsCount">0 matches</div>
+      </div>
+      <div class="ai-analysis" id="aiAnalysis">
+        <i class="fas fa-robot"></i>
+        <div class="ai-analysis-text" id="aiAnalysisText">
+          Analysing your image…
+        </div>
+      </div>
+      <div class="results-grid" id="resultsGrid"></div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="how-it-works" id="howItWorks">
+      <div class="hiw-title">How Visual Search Works</div>
+      <div class="hiw-steps">
+        <div class="hiw-step">
+          <div class="hiw-num">1</div>
+          <h4>Upload Photo</h4>
+          <p>Take or choose any t-shirt picture from your device</p>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">2</div>
+          <h4>AI Analyses</h4>
+          <p>Our AI reads color, style, fit and pattern from your image</p>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">3</div>
+          <h4>Get Matches</h4>
+          <p>Browse the most similar products from our collection</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end vs-container -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <a href="index.html"      class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="categories.html" class="nav-item"><i class="fas fa-th-large"></i><span>Shop</span></a>
+    <a href="cart.html"       class="nav-item"><i class="fas fa-shopping-bag"></i><span>Bag</span></a>
+    <a href="login.html" id="profileBottomBtn" class="nav-item">
+      <div id="profileAvatar" style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin:0 auto 4px;background:#ddd;border:2px solid var(--gold);">
+        <img id="profileAvatarImg" src="https://via.placeholder.com/80/ddd/999?text=?" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <span id="profileText">Account</span>
+    </a>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+  <script>
+    // ── Vars ──────────────────────────────────────
+    let uploadedFile = null;
+    const BASE = typeof BASE_URL !== 'undefined' ? BASE_URL : 'https://e-commerse-tzh7.onrender.com';
+
+    // ── Init ──────────────────────────────────────
+    // Safe init — scripts are at bottom so DOM is already ready,
+    // but DOMContentLoaded may have already fired. Handle both cases.
+    function initPage() {
+      // updateCartBadge is defined in script.js (loaded just above)
+      if (typeof updateCartBadge === 'function') {
+        updateCartBadge();
+      } else {
+        // Fallback: manually update badge from localStorage
+        try {
+          const cart  = JSON.parse(localStorage.getItem('twoDotsCart') || '[]');
+          const total = cart.reduce((s, i) => s + i.qty, 0);
+          const badge = document.getElementById('cartBadge');
+          if (badge) {
+            badge.textContent = total;
+            badge.style.display = total > 0 ? 'flex' : 'none';
+          }
+        } catch(e) {}
+      }
+      setupUploadZone();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPage);
+    } else {
+      initPage();
+    }
+
+    // ── Upload zone: drag-drop + click ────────────
+    function setupUploadZone() {
+      const zone  = document.getElementById('uploadZone');
+      const input = document.getElementById('fileInput');
+
+      zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+      zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
+      zone.addEventListener('drop', e => {
+        e.preventDefault(); zone.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (file) handleFile(file);
+      });
+      zone.addEventListener('click', e => {
+        if (e.target.closest('.upload-btn')) return; // handled by btn
+        input.click();
+      });
+      input.addEventListener('change', () => {
+        if (input.files[0]) handleFile(input.files[0]);
+      });
+    }
+
+    // ── Handle chosen file ────────────────────────
+    function handleFile(file) {
+      if (!file.type.startsWith('image/')) {
+        showToast('Please upload an image file (JPG, PNG, WEBP)');
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        showToast('Image is too large. Please use an image under 10 MB.');
+        return;
+      }
+      uploadedFile = file;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('previewThumb').src  = e.target.result;
+        document.getElementById('previewFileName').textContent = file.name;
+        showEl('previewSection');
+        hideEl('uploadZone');
+        hideEl('howItWorks');
+        hideEl('resultsSection');
+        hideEl('errorState');
+        hideEl('noResultsState');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ── Clear everything ──────────────────────────
+    function clearAll() {
+      uploadedFile = null;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('previewThumb').src = '';
+      hideEl('previewSection');
+      hideEl('resultsSection');
+      hideEl('errorState');
+      hideEl('noResultsState');
+      hideEl('loadingState');
+      showEl('uploadZone');
+      showEl('howItWorks');
+    }
+
+    // ── Run the AI Visual Search ──────────────────
+    async function runVisualSearch() {
+      if (!uploadedFile) return;
+
+      // Show loading
+      hideEl('previewSection');
+      hideEl('errorState');
+      hideEl('noResultsState');
+      hideEl('resultsSection');
+      showEl('loadingState');
+
+      // Animate loading steps
+      const steps = ['step1','step2','step3','step4'];
+      let current = 0;
+      const stepInterval = setInterval(() => {
+        if (current > 0) {
+          document.getElementById(steps[current-1]).className = 'done';
+          document.getElementById(steps[current-1]).innerHTML =
+            '<i class="fas fa-check-circle"></i> ' +
+            document.getElementById(steps[current-1]).textContent.trim();
+        }
+        if (current < steps.length) {
+          document.getElementById(steps[current]).className = 'active';
+          const el = document.getElementById(steps[current]);
+          el.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> ' + el.textContent.trim();
+          current++;
+        } else {
+          clearInterval(stepInterval);
+        }
+      }, 900);
+
+      try {
+        const formData = new FormData();
+        formData.append('image', uploadedFile);
+
+        const response = await fetch(`${BASE}/visual-search`, {
+          method: 'POST',
+          body: formData
+        });
+
+        clearInterval(stepInterval);
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.error || 'Server error: ' + response.status);
+        }
+
+        const data = await response.json();
+        hideEl('loadingState');
+
+        if (!data.results || data.results.length === 0) {
+          showEl('noResultsState');
+          showEl('previewSection');
+          return;
+        }
+
+        renderResults(data);
+        showEl('previewSection');
+
+      } catch (err) {
+        clearInterval(stepInterval);
+        hideEl('loadingState');
+        document.getElementById('errorMsg').textContent =
+          err.message || 'Could not connect to server. Please try again.';
+        showEl('errorState');
+        showEl('previewSection');
+        console.error('Visual search error:', err);
+      }
+    }
+
+    // ── Render results ────────────────────────────
+    function renderResults(data) {
+      const grid    = document.getElementById('resultsGrid');
+      const section = document.getElementById('resultsSection');
+      const count   = document.getElementById('resultsCount');
+      const aiText  = document.getElementById('aiAnalysisText');
+
+      count.textContent = data.results.length + ' matches found';
+
+      // AI analysis summary
+      if (data.analysis) {
+        const a = data.analysis;
+        aiText.innerHTML =
+          `<strong>AI detected:</strong> ` +
+          [a.color && `Color — <em>${a.color}</em>`,
+           a.category && `Style — <em>${a.category}</em>`,
+           a.fit && `Fit — <em>${a.fit}</em>`]
+          .filter(Boolean).join(' &nbsp;·&nbsp; ');
+      } else {
+        aiText.innerHTML = '<strong>Showing</strong> the most similar styles from our collection.';
+      }
+
+      grid.innerHTML = '';
+      data.results.forEach((product, idx) => {
+        const score = product.score || 0;
+        const badgeClass = score >= 80 ? 'high' : score >= 60 ? 'med' : '';
+        const badgeLabel = score >= 80 ? '🔥 Best Match' : score >= 60 ? 'Good Match' : 'Similar';
+
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.onclick = () => location.href = `product.html?id=${product.id}`;
+        card.innerHTML = `
+          <div style="overflow:hidden;position:relative;">
+            <img src="${product.image}" alt="${product.name}" loading="lazy"
+                 onerror="this.src='https://via.placeholder.com/300x360/f5f0e8/b8964e?text=Two+Dots'">
+            <div class="match-badge ${badgeClass}">${badgeLabel}</div>
+          </div>
+          <div class="result-info">
+            <div class="result-name">${product.name}</div>
+            <div class="result-tags">
+              <span class="result-tag">${product.category || ''}</span>
+              <span class="result-tag">${product.color || ''}</span>
+              ${product.fit ? `<span class="result-tag">${product.fit.split(' ')[0]}</span>` : ''}
+            </div>
+            <div class="result-price-row">
+              <div>
+                <span class="result-price">₹${product.price}</span>
+                <span class="result-old-price">₹${product.oldPrice || ''}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                ${product.discount ? `<span class="result-discount">${product.discount}</span>` : ''}
+                <button class="quick-add" onclick="event.stopPropagation();addToCart(${product.id},'${product.name.replace(/'/g,"\\'")}',${product.price},'${product.image}','M');showToast('Added to bag!')" title="Add to bag">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      showEl('resultsSection');
+    }
+
+    // ── Helpers ───────────────────────────────────
+    function showEl(id) { document.getElementById(id).classList.add('show'); document.getElementById(id).style.display = ''; }
+    function hideEl(id) { document.getElementById(id).classList.remove('show'); document.getElementById(id).style.display = 'none'; }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // Reset loading steps when new image is selected
+    document.getElementById('fileInput').addEventListener('change', () => {
+      ['step1','step2','step3','step4'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        el.className = i === 0 ? 'active' : '';
+        const labels = [
+          'Reading image properties',
+          'Detecting colors & patterns',
+          'Matching to our collection',
+          'Ranking best matches'
+        ];
+        el.innerHTML = `<i class="fas fa-circle"></i> ${labels[i]}`;
+      });
+    });
+  </script>
+</body>
+</html>

@@ -165,6 +165,14 @@
       margin: 18px 20px 16px;
       position: relative;
       animation: fadeUp 0.55s var(--ease-out) 0.05s both;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
     }
 
     .search-bar input {
@@ -187,7 +195,7 @@
       box-shadow: 0 0 0 3px rgba(184,150,78,0.10);
     }
 
-    .search-bar i {
+    .search-input-wrap i.fa-search {
       position: absolute;
       left: 18px;
       top: 50%;
@@ -195,6 +203,44 @@
       color: var(--warm-gray);
       font-size: 15px;
       pointer-events: none;
+    }
+
+    /* ── AI VISUAL SEARCH BUTTON ── */
+    .ai-search-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 16px;
+      height: 49px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 4px 16px rgba(184,150,78,0.28);
+      letter-spacing: 0.2px;
+      text-decoration: none;
+    }
+
+    .ai-search-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(184,150,78,0.40);
+    }
+
+    .ai-search-btn:active { transform: translateY(0); }
+
+    .ai-search-btn i { font-size: 14px; }
+
+    /* Hide text on very small screens, keep icon */
+    @media (max-width: 360px) {
+      .ai-search-btn span { display: none; }
+      .ai-search-btn { padding: 0 14px; }
     }
 
     /* ── CATALOG GRID ── */
@@ -813,10 +859,16 @@
     </div>
   </header>
 
-  <!-- SEARCH -->
+  <!-- SEARCH + AI VISUAL SEARCH BUTTON -->
   <div class="search-bar">
-    <i class="fas fa-search"></i>
-    <input type="text" id="searchInput" placeholder="Search in Two Dots...">
+    <div class="search-input-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search in Two Dots...">
+    </div>
+    <a href="visual-search.html" class="ai-search-btn" title="Search by image">
+      <i class="fas fa-camera-retro"></i>
+      <span>AI Search</span>
+    </a>
   </div>
 
   <!-- GRID -->
