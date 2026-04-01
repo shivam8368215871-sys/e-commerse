@@ -424,13 +424,8 @@ function initHeroSlider() {
   let currentIndex = 0, autoPlay, startX = 0, startY = 0, isScrolling = false;
 
   const goToSlide = (index) => {
-    wrapper.style.transform = `translateX(-${index * (100 / slides.length)}%)`;
+    wrapper.style.transform = `translateX(-${index * 100}%)`;
     dots.forEach((d, i) => d.classList.toggle("active", i === index));
-    // update counter
-    const counterEl = document.querySelector(".slide-counter .current");
-    if (counterEl) counterEl.textContent = String(index + 1).padStart(2, "0");
-    // ken-burns active class
-    slides.forEach((s, i) => s.classList.toggle("is-active", i === index));
     currentIndex = index;
   };
   const startAutoPlay = () => { autoPlay = setInterval(() => goToSlide((currentIndex + 1) % slides.length), 5000); };
@@ -476,10 +471,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("cartItems")) renderCart();
   window.addEventListener("storage", (e) => { if (e.key === "twoDotsUser") updateProfileIcon(); });
 
-  // Init slider & menu immediately — don't wait for product fetch
-  initHeroSlider();
-  initHamburgerMenu();
-
   fetch(`${BASE_URL}/products`)
     .then(res => res.json())
     .then(data => {
@@ -519,6 +510,8 @@ document.addEventListener("DOMContentLoaded", () => {
           renderSection("oversized", byCategory.oversized);
         }
         if (document.getElementById("catalogGrid")) setupCatalogPage(allProducts, byCategory);
+        initHeroSlider();
+        initHamburgerMenu();
       });
     });
 });
